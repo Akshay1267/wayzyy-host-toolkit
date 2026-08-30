@@ -48,7 +48,32 @@ npm run dev       # Starts UI on http://localhost:5173
 
 ---
 
-## 📂 Project Structure
+## 🌐 1-Click Deployment Guide
+
+### Step 1: Deploy Backend on Render (Free)
+1. Go to [dashboard.render.com](https://dashboard.render.com/) and click **New + > Web Service**.
+2. Connect your GitHub repository: `https://github.com/Akshay1267/wayzyy-host-toolkit`.
+3. Configure the service:
+   - **Root Directory**: `backend`
+   - **Build Command**: `npm install && node db/seed.js`
+   - **Start Command**: `node server.js`
+   - **Environment Variables**:
+     - `PORT`: `5000`
+     - `ANTHROPIC_API_KEY`: *(Optional - your Claude API key)*
+4. Click **Deploy Web Service**. Render will give you a public URL (e.g. `https://wayzyy-backend.onrender.com`).
+
+---
+
+### Step 2: Deploy Frontend on Vercel (Free)
+1. Go to [vercel.com](https://vercel.com/new) and import your repository: `https://github.com/Akshay1267/wayzyy-host-toolkit`.
+2. In the configuration:
+   - **Framework Preset**: `Vite`
+   - **Root Directory**: `frontend`
+   - **Environment Variables**:
+     - `VITE_API_URL`: `https://your-backend-name.onrender.com/api` (use your Render URL from Step 1)
+3. Click **Deploy**. Vercel will build and assign your live domain (e.g. `https://wayzyy-host-toolkit.vercel.app`).
+
+---
 
 ```
 wayzyy-host-toolkit/

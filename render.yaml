@@ -1,0 +1,16 @@
+services:
+  # Backend API Service (Express + SQLite)
+  - type: web
+    name: wayzyy-backend
+    runtime: node
+    plan: free
+    region: oregon
+    buildCommand: cd backend && npm install && node db/seed.js
+    startCommand: cd backend && node server.js
+    envVars:
+      - key: PORT
+        value: 5000
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: ANTHROPIC_WORKSPACE_ID
+        sync: false
