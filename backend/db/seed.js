@@ -4,23 +4,19 @@ const fs = require('fs');
 
 const DB_PATH = path.join(__dirname, 'toolkit.db');
 
-function seed() {
-  // Remove existing DB for fresh seed
-  if (fs.existsSync(DB_PATH)) {
-    try {
-      fs.unlinkSync(DB_PATH);
-    } catch (e) {
-      console.warn('Could not unlink existing DB, continuing overwrite:', e.message);
-    }
+function populateSeedData(db) {
+  // Ensure schema is executed
+  const schemaPath = path.join(__dirname, 'schema.sql');
+  if (fs.existsSync(schemaPath)) {
+    const schema = fs.readFileSync(schemaPath, 'utf8');
+    db.exec(schema);
   }
 
-  const db = new Database(DB_PATH);
-  db.pragma('journal_mode = WAL');
-  db.pragma('foreign_keys = ON');
-
-  // Run schema
-  const schema = fs.readFileSync(path.join(__dirname, 'schema.sql'), 'utf8');
-  db.exec(schema);
+  // Check if host already exists
+  const hostCheck = db.prepare('SELECT COUNT(*) as count FROM hosts').get();
+  if (hostCheck && hostCheck.count > 0) {
+    return;
+  }
 
   // Insert demo host
   const insertHost = db.prepare(
@@ -151,8 +147,28 @@ function seed() {
     '2026-09-30'
   );
 
-  db.close();
-  console.log('✅ Database seeded successfully at:', DB_PATH);
+  console.log('✅ Demo database data populated');
 }
 
-seed();
+function seed() {
+  if (fs.existsSync(DB_PATH)) {
+    try {
+      fs.unlinkSync(DB_PATH);
+    } catch (e) {
+      console.warn('Could not unlink existing DB:', e.message);
+    }
+  }
+
+  const db = new Database(DB_PATH);
+  db.pragma('journal_mode = WAL');
+  db.pragma('foreign_keys = ON');
+
+  populateSeedData(db);
+  db.close();
+}
+
+if (require.main === module) {
+  seed();
+}
+
+module.exports = { populateSeedData, seed, DB_PATH };

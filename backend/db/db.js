@@ -1,6 +1,7 @@
 const Database = require('better-sqlite3');
 const path = require('path');
 const fs = require('fs');
+const { populateSeedData } = require('./seed');
 
 const DB_PATH = path.join(__dirname, 'toolkit.db');
 
@@ -17,6 +18,13 @@ function getDb() {
     if (fs.existsSync(schemaPath)) {
       const schema = fs.readFileSync(schemaPath, 'utf8');
       db.exec(schema);
+    }
+
+    // Auto-populate seed data if empty
+    try {
+      populateSeedData(db);
+    } catch (e) {
+      console.warn('Auto-seed check notice:', e.message);
     }
   }
   return db;
