@@ -1,17 +1,17 @@
-# 🌴 Wayzyy — Host Growth & AI Booking Toolkit (Goa)
+# 🏡 Wayzyy — Host Growth & AI Booking Toolkit
 
-> **Goa Short-Term Rental AI & Revenue OS**  
-> Empowering boutique villa & homestay hosts across Goa (Anjuna, Assagao, Vagator, Fontainhas, Palolem) with smart dynamic pricing algorithms, Claude AI listing optimization, and a 24/7 automated WhatsApp direct-booking concierge.
+> **Short-Term Rental AI & Revenue Growth OS**  
+> Empowering boutique villa, mountain chalet, heritage homestay, and vacation rental hosts worldwide with smart dynamic pricing algorithms, AI listing optimization, and a 24/7 automated WhatsApp direct-booking concierge.
 
 ---
 
 ## ✨ Key Features
 
-- **📊 Host Performance & Intelligence Dashboard**: Real-time revenue metrics, estimated occupancy rates, direct vs. OTA channel breakdown, and recent guest reservation feeds.
-- **⚡ Smart Dynamic Pricing Engine**: Algorithmic rate calculator factoring Goa seasonality (peak, high, shoulder, monsoon), micro-location tiers (Premium, Mid, Budget), amenities multipliers (pool, sea view, AC, WiFi), weekend surges, and live market comparables.
-- **✍️ AI Listing & Photo Staging Studio**: Generates high-converting Airbnb/Booking.com copy, catchy titles, sensory descriptions, and evaluates listing photos for lighting, cleanliness, and staging quality.
+- **📊 Host Performance & Intelligence Dashboard**: Real-time revenue metrics, occupancy analytics, direct vs. OTA channel breakdown, and recent guest reservation feeds.
+- **⚡ Smart Dynamic Pricing Studio**: Algorithmic rate calculator factoring destination demand, seasonality (peak holidays, high season, shoulder, monsoon/off-season), micro-location tiers (Premium, Mid, Budget), amenities multipliers (pool, mountain view, sea view, fireplace, AC, WiFi), weekend surges, and live market comparables.
+- **✍️ AI Listing & Photo Staging Studio**: Generates high-converting Airbnb/Booking.com copy, catchy titles, sensory descriptions, SEO search tags, and evaluates listing photos for architectural lighting, cleanliness, and staging quality.
 - **💬 WhatsApp AI Concierge Simulator**: Multi-turn 24/7 conversational booking assistant with real-time entity extraction (`dates`, `guests`, `property`), price quotation, and direct booking management (saving 15–20% in OTA commissions).
-- **🏡 Property Manager & Booking Calendar**: Showcase active properties, filter reservations by status, and create new direct bookings or properties.
+- **🏡 Property Manager & Booking Calendar**: Showcase active properties across diverse destinations, filter reservations by status, and create new direct bookings or listings.
 
 ---
 
@@ -19,7 +19,7 @@
 
 - **Frontend**: Vite, TypeScript, Custom Fluid Responsive Warm White Luxury CSS Design System.
 - **Backend**: Node.js, Express, SQLite (`better-sqlite3` with WAL mode).
-- **AI Engine**: Anthropic Claude 3.5 Sonnet (`@anthropic-ai/sdk`) with high-precision Goan domain heuristic fallback engine.
+- **AI Engine**: Anthropic Claude 3.5 Sonnet (`@anthropic-ai/sdk`) with high-precision vacation rental domain heuristic fallback engine.
 
 ---
 
@@ -60,7 +60,7 @@ npm run dev       # Starts UI on http://localhost:5173
    - **Environment Variables**:
      - `PORT`: `5000`
      - `ANTHROPIC_API_KEY`: *(Optional - your Claude API key)*
-4. Click **Deploy Web Service**. Render will give you a public URL (e.g. `https://wayzyy-backend.onrender.com`).
+4. Click **Deploy Web Service**. Render will give you a public URL (e.g. `https://wayzyy-host-toolkit.onrender.com`).
 
 ---
 
@@ -70,15 +70,17 @@ npm run dev       # Starts UI on http://localhost:5173
    - **Framework Preset**: `Vite`
    - **Root Directory**: `frontend`
    - **Environment Variables**:
-     - `VITE_API_URL`: `https://your-backend-name.onrender.com/api` (use your Render URL from Step 1)
-3. Click **Deploy**. Vercel will build and assign your live domain (e.g. `https://wayzyy-host-toolkit.vercel.app`).
+     - `VITE_API_URL`: `https://wayzyy-host-toolkit.onrender.com/api` (use your Render URL from Step 1)
+3. Click **Deploy**. Vercel will build and assign your live domain (e.g. `https://frontend-xi-seven-46.vercel.app`).
 
 ---
+
+## 📂 Project Structure
 
 ```
 wayzyy-host-toolkit/
 ├── backend/
-│   ├── data/             # Goa market comparables and season data
+│   ├── data/             # Multi-destination market comparables and season data
 │   ├── db/               # SQLite schema, connection, and seeder
 │   ├── routes/           # Express REST endpoints
 │   ├── services/         # Pricing engine, Claude AI client, WhatsApp bot engine
@@ -88,7 +90,7 @@ wayzyy-host-toolkit/
 │   │   ├── components/   # Dashboard, Pricing, Listing, Bot, Properties
 │   │   ├── api.ts        # Typed API client
 │   │   ├── types.ts      # Data models
-│   │   ├── style.css     # Design system
+│   │   ├── style.css     # Luxury warm white design system
 │   │   └── main.ts       # Router & app entry
 │   └── index.html
 └── README.md

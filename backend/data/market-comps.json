@@ -1,0 +1,114 @@
+{
+  "destinations": [
+    { "name": "Goa", "vibe": "coastal", "tier": "premium" },
+    { "name": "Manali", "vibe": "mountain", "tier": "premium" },
+    { "name": "Jaipur", "vibe": "heritage", "tier": "premium" },
+    { "name": "Udaipur", "vibe": "heritage", "tier": "premium" },
+    { "name": "Rishikesh", "vibe": "mountain", "tier": "mid" },
+    { "name": "Coorg", "vibe": "mountain", "tier": "mid" },
+    { "name": "Munnar", "vibe": "mountain", "tier": "mid" },
+    { "name": "Alibaug", "vibe": "coastal", "tier": "premium" },
+    { "name": "Pondicherry", "vibe": "coastal", "tier": "mid" },
+    { "name": "Mumbai", "vibe": "urban", "tier": "premium" },
+    { "name": "Bangalore", "vibe": "urban", "tier": "mid" },
+    { "name": "Dubai", "vibe": "urban", "tier": "premium" },
+    { "name": "Bali", "vibe": "coastal", "tier": "premium" }
+  ],
+  "locationTiers": {
+    "premium": { "multiplier": 1.25, "label": "Premium Prime Destination" },
+    "mid": { "multiplier": 1.05, "label": "Mid-Tier Destination" },
+    "budget": { "multiplier": 0.90, "label": "Emerging / Budget Destination" }
+  },
+  "seasonMultipliers": {
+    "peak": { "multiplier": 1.45, "label": "Peak Holiday Season (Holidays, Festivities & Long Weekends)" },
+    "high": { "multiplier": 1.20, "label": "High Season (Favorable Weather & High Inflow)" },
+    "shoulder": { "multiplier": 1.00, "label": "Shoulder Season (Moderate Steady Demand)" },
+    "monsoon": { "multiplier": 0.82, "label": "Low / Off Season (Value Travel Period)" }
+  },
+  "amenityBoosts": {
+    "pool": 0.20,
+    "sea_view": 0.18,
+    "mountain_view": 0.18,
+    "jacuzzi": 0.15,
+    "ac": 0.10,
+    "wifi": 0.05,
+    "kitchen": 0.08,
+    "breakfast": 0.08,
+    "parking": 0.04,
+    "garden": 0.05,
+    "fireplace": 0.10,
+    "bbq": 0.06
+  },
+  "comparables": [
+    {
+      "name": "Casa Azul Pool Villa",
+      "type": "villa",
+      "location": "Anjuna, Goa",
+      "bedrooms": 2,
+      "rate": 7800,
+      "amenities": ["pool", "ac", "wifi", "kitchen"],
+      "rating": 4.9,
+      "occupancy": 0.84
+    },
+    {
+      "name": "Cedar Peak Pine Chalet",
+      "type": "villa",
+      "location": "Old Manali, Himachal",
+      "bedrooms": 3,
+      "rate": 8500,
+      "amenities": ["mountain_view", "fireplace", "wifi", "breakfast"],
+      "rating": 4.95,
+      "occupancy": 0.88
+    },
+    {
+      "name": "Haveli Heritage Suite",
+      "type": "heritage_room",
+      "location": "Old City, Jaipur",
+      "bedrooms": 1,
+      "rate": 4200,
+      "amenities": ["ac", "wifi", "breakfast", "heritage_decor"],
+      "rating": 4.85,
+      "occupancy": 0.79
+    },
+    {
+      "name": "The Skyline Penthouse",
+      "type": "apartment",
+      "location": "Bandra West, Mumbai",
+      "bedrooms": 2,
+      "rate": 9500,
+      "amenities": ["city_view", "ac", "wifi", "gym"],
+      "rating": 4.88,
+      "occupancy": 0.91
+    },
+    {
+      "name": "Misty Hills Plantation Stay",
+      "type": "homestay",
+      "location": "Madikeri, Coorg",
+      "bedrooms": 2,
+      "rate": 5200,
+      "amenities": ["nature_view", "wifi", "breakfast", "garden"],
+      "rating": 4.8,
+      "occupancy": 0.76
+    },
+    {
+      "name": "Ganga Serenity Riverside Loft",
+      "type": "apartment",
+      "location": "Tapovan, Rishikesh",
+      "bedrooms": 1,
+      "rate": 3400,
+      "amenities": ["river_view", "ac", "wifi", "yoga_mat"],
+      "rating": 4.75,
+      "occupancy": 0.82
+    },
+    {
+      "name": "Sunset Palm Beach Cottage",
+      "type": "beach_hut",
+      "location": "Palolem Beach",
+      "bedrooms": 1,
+      "rate": 2600,
+      "amenities": ["sea_view", "wifi", "breakfast"],
+      "rating": 4.7,
+      "occupancy": 0.73
+    }
+  ]
+}

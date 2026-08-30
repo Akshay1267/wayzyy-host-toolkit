@@ -4,7 +4,7 @@ async function generateListing(params = {}) {
   const {
     name = '',
     propertyType = 'villa',
-    location = 'Anjuna',
+    location = 'Scenic Destination',
     bedrooms = 2,
     bathrooms = 2,
     maxGuests = 4,
@@ -12,33 +12,33 @@ async function generateListing(params = {}) {
     description = ''
   } = params;
 
-  const prompt = `Generate a high-converting short-term rental listing for a property in Goa, India.
+  const prompt = `Generate a high-converting short-term rental listing for a vacation property.
 
 Property Details:
 - Name: ${name || propertyType + ' in ' + location}
 - Type: ${propertyType}
-- Location: ${location}, Goa
+- Location: ${location}
 - Bedrooms: ${bedrooms}, Bathrooms: ${bathrooms}
 - Max Guests: ${maxGuests}
-- Amenities: ${amenities.join(', ') || 'Standard amenities'}
-- Current Host Notes: ${description || 'None provided'}
+- Amenities: ${amenities.join(', ') || 'Essential hospitality amenities'}
+- Host Notes: ${description || 'None provided'}
 
 Generate EXACTLY this JSON format (no markdown code blocks, just raw JSON):
 {
   "titles": [
-    "Catchy, luxury title 1 with location",
-    "Experience-focused title 2 with amenities",
-    "Family/group-oriented title 3"
+    "Catchy, luxury title 1 with location and top USP",
+    "Experience-focused title 2 with amenities and capacity",
+    "Scenic retreat title 3 tailored for travelers"
   ],
-  "description": "A compelling 3-paragraph property description. Paragraph 1: Atmospheric hook about the stay experience. Paragraph 2: Room layouts, comfort, and signature amenities. Paragraph 3: Neighborhood vibes in ${location}, nearby beaches, cafes, and sunset spots.",
+  "description": "A compelling 3-paragraph property description. Paragraph 1: Atmospheric hook about the stay experience and setting in ${location}. Paragraph 2: Room layouts, architecture, comfort, and signature amenities. Paragraph 3: Neighborhood vibes in ${location}, nearby attractions, dining, and outdoor highlights.",
   "tags": ["tag1", "tag2", "tag3", "tag4", "tag5", "tag6"],
   "highlights": ["Top highlight 1", "Top highlight 2", "Top highlight 3"]
 }
 
-Make titles catchy but authentic. Tags should be popular Goa search terms. Highlights should be 3 unique selling points.`;
+Make titles catchy and click-worthy. Tags should be high-volume search terms. Highlights should be 3 unique selling points.`;
 
   const llmResponse = await chat(
-    'You are a premier Airbnb & short-term rental copywriter specializing in Goa, India holiday homes. Respond strictly with valid JSON without markdown.',
+    'You are a world-class Airbnb & luxury vacation rental copywriter. Respond strictly with valid JSON without markdown.',
     prompt,
     { maxTokens: 1500 }
   );
@@ -59,35 +59,38 @@ Make titles catchy but authentic. Tags should be popular Goa search terms. Highl
   const propTitle = name || `Charming ${bedrooms}BHK ${propertyType.charAt(0).toUpperCase() + propertyType.slice(1)}`;
   const hasPool = amenities.includes('pool');
   const hasSeaView = amenities.includes('sea_view');
+  const hasMountainView = amenities.includes('mountain_view');
   const hasBreakfast = amenities.includes('breakfast');
 
   const amenityHighlight = hasPool
     ? 'Private Pool & Sun Deck'
+    : hasMountainView
+    ? 'Panoramic Mountain & Valley Views'
     : hasSeaView
-    ? 'Panoramic Arabian Sea Views'
+    ? 'Unobstructed Coastal Sea Views'
     : hasBreakfast
-    ? 'Complimentary Goan Breakfast'
-    : `${amenities[0] ? amenities[0].toUpperCase() : 'Modern'} Comforts`;
+    ? 'Complimentary Artisan Breakfast'
+    : `${amenities[0] ? amenities[0].toUpperCase() : 'Premium'} Hospitality Comforts`;
 
   return {
     titles: [
-      `🌴 ${propTitle} — ${amenityHighlight} in ${location}`,
-      `✨ Escape to ${location}: Luxury ${bedrooms}-Bedroom ${propertyType.charAt(0).toUpperCase() + propertyType.slice(1)} Retreat`,
-      `🌊 Sun, Serenity & Goan Soul at ${name || propTitle} (${maxGuests} Guests)`
+      `✨ ${propTitle} — ${amenityHighlight} in ${location}`,
+      `🌿 Escape to ${location}: Luxury ${bedrooms}-Bedroom ${propertyType.charAt(0).toUpperCase() + propertyType.slice(1)} (${maxGuests} Guests)`,
+      `🏡 Serene Designer Getaway in ${location} with ${amenityHighlight}`
     ],
-    description: `Welcome to ${propTitle}, your idyllic sanctuary nestled in vibrant ${location}, Goa. Designed with an effortless blend of relaxed coastal elegance and modern luxury, this serene haven welcomes up to ${maxGuests} guests for an unforgettable tropical escape.\n\nFeaturing ${bedrooms} sunlit bedrooms and ${bathrooms} curated bathrooms, every corner is designed for comfort. Enjoy high-speed WiFi for remote work, air-conditioned interiors, and premium amenities including ${amenities.join(', ') || 'essential comforts'}. Whether you're relaxing on the private terrace or unwinding after a sun-soaked afternoon, the space feels like home.\n\nStep outside and immerse yourself in the authentic rhythm of ${location}. You are just moments away from golden sand beaches, famous cliffside sunset cafes, local Goan fish-curry shacks, and vibrant night markets. Experience the true magic of Goa from your own private paradise.`,
+    description: `Welcome to ${propTitle}, your private sanctuary nestled in the scenic landscapes of ${location}. Designed with an effortless blend of refined comfort and local charm, this peaceful retreat welcomes up to ${maxGuests} guests for an unforgettable holiday getaway.\n\nFeaturing ${bedrooms} sunlit bedrooms and ${bathrooms} thoughtfully curated bathrooms, every detail is crafted for relaxation. Enjoy high-speed WiFi for work or streaming, climate control, and premium amenities including ${amenities.join(', ') || 'essential modern comforts'}. Whether you're sipping morning coffee on the private terrace or unwinding after a day of exploration, the space feels like home.\n\nStep outside to discover the authentic charm of ${location}. You are just moments away from celebrated local dining, boutique cafes, picturesque trails, and cultural landmarks. Experience the true essence of ${location} from your own private haven.`,
     tags: [
-      location.toLowerCase(),
-      'goa-stay',
+      location.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+      'vacation-stay',
       `${propertyType.replace('_', '-')}-rental`,
-      'beach-vacation',
-      'workation-goa',
-      hasPool ? 'private-pool' : 'tropical-getaway'
+      'holiday-home',
+      'weekend-getaway',
+      hasPool ? 'private-pool' : hasMountainView ? 'mountain-retreat' : 'boutique-stay'
     ],
     highlights: [
-      `Spacious ${bedrooms} Bedroom layout accommodating up to ${maxGuests} guests comfortably`,
+      `Spacious ${bedrooms}-Bedroom layout accommodating up to ${maxGuests} guests comfortably`,
       amenityHighlight,
-      `Prime ${location} setting close to top beaches, cafes & cultural landmarks`
+      `Prime location in ${location} close to key attractions, nature & dining`
     ]
   };
 }
@@ -95,15 +98,15 @@ Make titles catchy but authentic. Tags should be popular Goa search terms. Highl
 async function assessImageQuality(imageUrl) {
   if (!imageUrl) {
     return {
-      score: 7.5,
-      lighting: 8,
-      composition: 7,
-      cleanliness: 9,
-      feedback: 'Good baseline photo! Consider adding warm accent lighting and wide-angle framing to showcase more spatial depth.',
+      score: 8.4,
+      lighting: 8.5,
+      composition: 8.0,
+      cleanliness: 9.2,
+      feedback: 'Crisp, inviting visual presentation with good natural illumination and clean staging.',
       tips: [
-        'Shoot during golden hour (4:30 PM - 6:00 PM) for warm, inviting Goan sunlight',
-        'Use wide-angle lens (0.5x or 16-24mm) positioned at chest height',
-        'Add lifestyle staging like tropical flowers, fresh fruit basket, or folded beach towels'
+        'Shoot during golden hour (early morning or late afternoon) for warm, cinematic natural sunlight',
+        'Use wide-angle lens (0.5x or 16-24mm) positioned at chest height for balanced room proportions',
+        'Add lifestyle staging like fresh local flowers, artisan ceramics, or cozy linen throws'
       ]
     };
   }
@@ -135,15 +138,15 @@ Respond in strict JSON:
   }
 
   return {
-    score: 8.2,
-    lighting: 8.0,
-    composition: 8.5,
+    score: 8.4,
+    lighting: 8.5,
+    composition: 8.0,
     cleanliness: 9.0,
-    feedback: 'Vibrant and inviting visual appeal with solid natural illumination and clean staging. The framing effectively captures Goan tropical character.',
+    feedback: 'Vibrant and inviting visual appeal with balanced natural illumination, symmetrical framing, and uncluttered staging.',
     tips: [
-      'Capture horizontal landscape orientation to display optimal spatial proportion on booking channels',
-      'Turn on indoor ambient lamps alongside natural window daylight to eliminate harsh shadows',
-      'Add fresh local Goan staging elements like tender coconut or handwoven jute mats'
+      'Capture horizontal landscape orientation to display optimal spatial proportion on OTA channels',
+      'Turn on warm ambient lamps alongside natural window daylight to eliminate dark corners',
+      'Feature unique architectural details and comfortable seating vignettes to inspire bookings'
     ]
   };
 }

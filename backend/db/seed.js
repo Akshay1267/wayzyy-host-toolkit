@@ -12,80 +12,111 @@ function populateSeedData(db) {
     db.exec(schema);
   }
 
-  // Check if host already exists
-  const hostCheck = db.prepare('SELECT COUNT(*) as count FROM hosts').get();
-  if (hostCheck && hostCheck.count > 0) {
-    return;
-  }
+  // Clear existing hosts and properties to re-seed multi-destination portfolio
+  db.exec(`
+    DELETE FROM bookings;
+    DELETE FROM pricing_logs;
+    DELETE FROM properties;
+    DELETE FROM hosts;
+  `);
 
   // Insert demo host
   const insertHost = db.prepare(
     'INSERT INTO hosts (name, phone, email) VALUES (?, ?, ?)'
   );
-  insertHost.run('Rajesh Naik', '+919876543210', 'rajesh.naik@wayzyy.com');
+  const hostResult = insertHost.run('Rajesh Naik', '+919876543210', 'rajesh.naik@wayzyy.com');
+  const hostId = hostResult.lastInsertRowid;
 
-  // Insert 3 demo properties
+  // Insert 4 multi-destination demo properties
   const insertProperty = db.prepare(`
     INSERT INTO properties (host_id, name, property_type, location, location_tier, bedrooms, bathrooms, max_guests, base_rate, amenities, description, image_urls, listing_score)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `);
 
-  insertProperty.run(
-    1,
-    'Casa Azul',
+  // 1. Casa Azul (Coastal Villa)
+  const prop1 = insertProperty.run(
+    hostId,
+    'Casa Azul Pool Villa',
     'villa',
-    'Anjuna',
+    'Anjuna, Goa',
     'premium',
     2,
     2,
     6,
     4500,
     JSON.stringify(['pool', 'ac', 'wifi', 'kitchen', 'parking']),
-    'A charming 2-bedroom Portuguese-style villa nestled in the heart of Anjuna, just 5 minutes from the beach. Features a private pool, lush tropical garden, high-speed WiFi, and fully equipped modular kitchen. Perfect for families and group getaways.',
+    'A charming 2-bedroom boutique villa nestled 5 minutes from the coast. Features a private swimming pool, lush tropical garden, high-speed WiFi, and fully equipped modular kitchen. Ideal for families and group getaways.',
     JSON.stringify([
       'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=800&q=80',
       'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80'
     ]),
-    8.8
+    9.2
   );
 
-  insertProperty.run(
-    1,
-    "Pinto's Heritage Stay",
+  // 2. Cedar Peak Chalet (Mountain Chalet)
+  const prop2 = insertProperty.run(
+    hostId,
+    'Cedar Peak Chalet',
+    'villa',
+    'Old Manali, Himachal',
+    'premium',
+    3,
+    3,
+    8,
+    5800,
+    JSON.stringify(['mountain_view', 'fireplace', 'wifi', 'kitchen', 'parking', 'bbq']),
+    'Perched amidst whispering pine forests, this handcrafted Himalayan cedar-wood chalet offers panoramic snow-peak views, an indoor stone fireplace, high-speed fiber internet, and cozy wooden sun-decks.',
+    JSON.stringify([
+      'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&fit=crop&w=800&q=80'
+    ]),
+    9.5
+  );
+
+  // 3. Haveli Heritage Stay (Cultural/Heritage Suite)
+  const prop3 = insertProperty.run(
+    hostId,
+    'Haveli Heritage Stay',
     'heritage_room',
-    'Fontainhas',
+    'Old City, Jaipur',
     'premium',
     1,
     1,
-    2,
-    2800,
-    JSON.stringify(['ac', 'wifi', 'breakfast']),
-    'Step back in time at this beautifully restored heritage room in the colorful Latin Quarter of Fontainhas, Panaji. Featuring vintage rosewood furniture, traditional Goan architecture, daily homemade breakfast, and bespoke neighborhood walking trails.',
+    3,
+    3200,
+    JSON.stringify(['ac', 'wifi', 'breakfast', 'garden']),
+    'Experience regal charm at this restored 19th-century royal suite in the historic heart of the Pink City. Hand-carved archways, courtyards, authentic artisan breakfasts, and private rooftop sunset views.',
     JSON.stringify([
       'https://images.unsplash.com/photo-1566665797739-1674de7a421a?auto=format&fit=crop&w=800&q=80',
       'https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=800&q=80'
     ]),
-    9.2
+    9.1
   );
 
-  insertProperty.run(
-    1,
-    'Sunset Shack',
-    'beach_hut',
-    'Palolem',
-    'budget',
-    1,
-    1,
+  // 4. The Skyline Penthouse (City Loft)
+  const prop4 = insertProperty.run(
+    hostId,
+    'The Skyline Penthouse',
+    'apartment',
+    'Bandra West, Mumbai',
+    'premium',
     2,
-    1800,
-    JSON.stringify(['wifi', 'sea_view']),
-    'Wake up to the rhythmic sound of waves at this cozy beachfront wooden eco-hut right on Palolem beach. Unobstructed sunset views over the Arabian Sea, hammocks, fresh sea breeze, and direct sandy beach access.',
+    2,
+    4,
+    7500,
+    JSON.stringify(['ac', 'wifi', 'city_view', 'kitchen', 'parking']),
+    'Designer sea-breeze penthouse in the vibrant epicenter of Bandra. Floor-to-ceiling glass windows with panoramic city views, modern minimalist decor, superfast WiFi, and walkable access to top cafes and boutiques.',
     JSON.stringify([
-      'https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=800&q=80'
+      'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=800&q=80'
     ]),
-    7.9
+    9.4
   );
+
+  const id1 = prop1.lastInsertRowid;
+  const id2 = prop2.lastInsertRowid;
+  const id3 = prop3.lastInsertRowid;
+  const id4 = prop4.lastInsertRowid;
 
   // Insert demo bookings
   const insertBooking = db.prepare(`
@@ -94,20 +125,21 @@ function populateSeedData(db) {
   `);
 
   // Casa Azul bookings
-  insertBooking.run(1, 'Ankit Sharma', '+919812345678', '2026-09-05', '2026-09-08', 4, 13500, 4500, 'confirmed', 'whatsapp', 'Requested early check-in at 12 PM');
-  insertBooking.run(1, 'Priya Mehta', '+919823456789', '2026-09-12', '2026-09-15', 2, 14400, 4800, 'confirmed', 'direct', 'Celebrating anniversary');
-  insertBooking.run(1, 'David Wilson', '+447911123456', '2026-09-20', '2026-09-25', 6, 27000, 5400, 'pending', 'platform', 'Needs airport taxi pickup');
-  insertBooking.run(1, 'Sneha Reddy', '+919834567890', '2026-10-01', '2026-10-04', 3, 17550, 5850, 'confirmed', 'whatsapp', 'Repeat guest');
-  insertBooking.run(1, 'Marco Rossi', '+393331234567', '2026-10-10', '2026-10-14', 4, 23400, 5850, 'confirmed', 'platform', 'Dietary preference: vegan breakfast');
+  insertBooking.run(id1, 'Ankit Sharma', '+919812345678', '2026-09-05', '2026-09-08', 4, 13500, 4500, 'confirmed', 'whatsapp', 'Requested early check-in at 12 PM');
+  insertBooking.run(id1, 'Priya Mehta', '+919823456789', '2026-09-12', '2026-09-15', 2, 14400, 4800, 'confirmed', 'direct', 'Celebrating anniversary');
+  insertBooking.run(id1, 'Sneha Reddy', '+919834567890', '2026-10-01', '2026-10-04', 3, 17550, 5850, 'confirmed', 'whatsapp', 'Repeat guest');
 
-  // Pinto's Heritage Stay bookings
-  insertBooking.run(2, 'Vikram Joshi', '+919845678901', '2026-09-01', '2026-09-03', 2, 5600, 2800, 'completed', 'direct', 'Solo heritage photographer');
-  insertBooking.run(2, 'Lisa Chen', '+8613912345678', '2026-09-10', '2026-09-13', 2, 9240, 3080, 'confirmed', 'platform', 'Interested in Portuguese heritage tour');
-  insertBooking.run(2, 'Arun Kumar', '+919856789012', '2026-09-18', '2026-09-20', 1, 5600, 2800, 'confirmed', 'whatsapp', 'Workation setup requested');
+  // Cedar Peak Chalet bookings
+  insertBooking.run(id2, 'Arjun Varma', '+919845678901', '2026-09-10', '2026-09-14', 6, 23200, 5800, 'confirmed', 'whatsapp', 'Mountain hiking expedition group');
+  insertBooking.run(id2, 'David Miller', '+447911123456', '2026-09-20', '2026-09-25', 4, 29000, 5800, 'pending', 'platform', 'Needs fireplace wood stocked');
 
-  // Sunset Shack bookings
-  insertBooking.run(3, 'Meera Patel', '+919867890123', '2026-09-07', '2026-09-10', 2, 5400, 1800, 'confirmed', 'whatsapp', 'Yoga enthusiast');
-  insertBooking.run(3, 'Tom Anderson', '+614123456789', '2026-09-15', '2026-09-20', 2, 9000, 1800, 'pending', 'platform', 'Kayaking tour requested');
+  // Haveli Heritage Stay bookings
+  insertBooking.run(id3, 'Lisa Chen', '+8613912345678', '2026-09-08', '2026-09-11', 2, 9600, 3200, 'completed', 'direct', 'Artisan heritage photography');
+  insertBooking.run(id3, 'Vikram Joshi', '+919856789012', '2026-09-18', '2026-09-20', 2, 6400, 3200, 'confirmed', 'whatsapp', 'Cultural holiday');
+
+  // The Skyline Penthouse bookings
+  insertBooking.run(id4, 'Marco Rossi', '+393331234567', '2026-09-06', '2026-09-09', 2, 22500, 7500, 'confirmed', 'direct', 'Executive business & leisure travel');
+  insertBooking.run(id4, 'Kavita Iyer', '+919867890123', '2026-09-16', '2026-09-19', 3, 22500, 7500, 'confirmed', 'whatsapp', 'Bandra weekend staycation');
 
   // Insert demo pricing logs
   const insertPricing = db.prepare(`
@@ -116,38 +148,22 @@ function populateSeedData(db) {
   `);
 
   insertPricing.run(
-    1,
+    id1,
     4200,
     5100,
     6000,
     JSON.stringify([
       { factor: 'Base Nightly Rate', impact: '₹4,500', direction: 'base' },
-      { factor: 'Premium Location (Anjuna)', impact: '+15%', direction: 'up' },
+      { factor: 'Prime Location Demand', impact: '+15%', direction: 'up' },
       { factor: 'Pool & AC Amenities', impact: '+30%', direction: 'up' },
-      { factor: 'Shoulder Season (Sep)', impact: '0%', direction: 'neutral' }
+      { factor: 'Shoulder Season', impact: '0%', direction: 'neutral' }
     ]),
-    'Your villa in Anjuna commands strong demand due to the private pool and prime coastal location. Current shoulder season provides steady baseline occupancy; prepare to increase rates up to 1.8x for the upcoming Dec-Feb peak season.',
+    'Your villa commands strong demand due to the private pool and prime coastal setting. Current shoulder season provides steady baseline occupancy; prepare to increase rates for upcoming peak holiday weekends.',
     '2026-09-01',
     '2026-09-30'
   );
 
-  insertPricing.run(
-    2,
-    2600,
-    3080,
-    3600,
-    JSON.stringify([
-      { factor: 'Base Nightly Rate', impact: '₹2,800', direction: 'base' },
-      { factor: 'Heritage Premium (Fontainhas)', impact: '+15%', direction: 'up' },
-      { factor: 'Complimentary Breakfast', impact: '+7%', direction: 'up' },
-      { factor: 'Single Bedroom', impact: '0%', direction: 'neutral' }
-    ]),
-    'Heritage rooms in Fontainhas have high cultural appeal for cultural travelers. Your homemade breakfast inclusion boosts guest value. Consider pushing rates by +25% for upcoming festival weekends in October.',
-    '2026-09-01',
-    '2026-09-30'
-  );
-
-  console.log('✅ Demo database data populated');
+  console.log('✅ Multi-destination database data populated successfully');
 }
 
 function seed() {

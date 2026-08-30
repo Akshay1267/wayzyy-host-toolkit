@@ -11,7 +11,7 @@ export function renderBotSimulator(container: HTMLElement, showToast: (msg: stri
   let messages: ChatMessage[] = [
     {
       sender: 'bot',
-      text: 'Namaste & Welcome to Wayzyy Goa! 🌴✨\n\nI\'m your 24/7 AI booking assistant for local host Rajesh. How can I help you plan your Goan stay today?',
+      text: 'Welcome to Wayzyy Guest Concierge! 🏡✨\n\nI\'m your 24/7 AI booking assistant. How can I help you discover, check dates, or reserve a vacation stay today?',
       time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     }
   ];
@@ -26,12 +26,12 @@ export function renderBotSimulator(container: HTMLElement, showToast: (msg: stri
   };
 
   let currentIntent = 'general';
-  let suggestedActions: string[] = ['Check Casa Azul', 'View Rates', 'Book Stay'];
+  let suggestedActions: string[] = ['Check Casa Azul', 'Mountain Chalets', 'View Rates', 'Book Stay'];
 
   container.innerHTML = `
     <div class="section-header">
       <div>
-        <h1 class="section-title">WhatsApp AI Booking Assistant</h1>
+        <h1 class="section-title">WhatsApp AI Booking Concierge</h1>
         <p class="section-desc">Test the autonomous 24/7 guest concierge that qualifies guest leads, checks real-time dates, and closes direct reservations on WhatsApp.</p>
       </div>
       <button id="btn-reset-chat" class="btn btn-secondary btn-sm">🔄 Reset Conversation</button>
@@ -42,10 +42,10 @@ export function renderBotSimulator(container: HTMLElement, showToast: (msg: stri
       <div class="phone-mockup">
         <!-- Phone Header -->
         <div class="phone-header">
-          <div class="phone-avatar">🌴</div>
+          <div class="phone-avatar">🏡</div>
           <div class="phone-contact-info">
             <div class="phone-contact-name">
-              <span>Wayzyy Host Concierge</span>
+              <span>Wayzyy Guest Concierge</span>
               <span class="verified-icon">✓</span>
             </div>
             <div class="phone-contact-status">online • typically replies instantly</div>
@@ -59,10 +59,10 @@ export function renderBotSimulator(container: HTMLElement, showToast: (msg: stri
 
         <!-- Quick Prompts Bar -->
         <div id="quick-prompts-container" class="quick-prompts-bar">
-          <span class="prompt-chip" data-prompt="Is Casa Azul available next weekend for 4 guests?">🏡 Casa Azul Next Weekend</span>
-          <span class="prompt-chip" data-prompt="What are the rates for Pinto's Heritage Stay?">💰 Rates for Pinto's</span>
-          <span class="prompt-chip" data-prompt="I want to book Sunset Shack for 2 nights">🏖️ Book Sunset Shack</span>
-          <span class="prompt-chip" data-prompt="Do you have any beachfront stays with WiFi?">🌊 Beachfront + WiFi</span>
+          <span class="prompt-chip" data-prompt="Is Casa Azul available next weekend for 4 guests?">🌴 Casa Azul Next Weekend</span>
+          <span class="prompt-chip" data-prompt="Do you have mountain chalets in Manali with fireplace?">🏔️ Manali Mountain Chalet</span>
+          <span class="prompt-chip" data-prompt="What are the rates for Haveli Heritage Stay?">🏛️ Rates for Jaipur Haveli</span>
+          <span class="prompt-chip" data-prompt="I want to book the Skyline Penthouse in Mumbai for 2 nights">🏙️ Book Mumbai Penthouse</span>
         </div>
 
         <!-- Input Bar -->
@@ -79,7 +79,7 @@ export function renderBotSimulator(container: HTMLElement, showToast: (msg: stri
         <div class="glass-card">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
             <div>
-              <h3 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700;">Live AI Entity & Intent Inspector</h3>
+              <h3 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 800; color: #0f172a;">Live AI Entity & Intent Inspector</h3>
               <p style="font-size: 0.8rem; color: var(--text-muted);">Real-time semantic extraction from guest dialogue</p>
             </div>
             <span id="inspector-intent-tag" class="intent-tag">GENERAL</span>
@@ -87,25 +87,25 @@ export function renderBotSimulator(container: HTMLElement, showToast: (msg: stri
 
           <!-- Booking Progression Status -->
           <div style="margin-bottom: 1.5rem;">
-            <div style="font-size: 0.82rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 0.5rem;">
+            <div style="font-size: 0.82rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 0.5rem;">
               Booking Flow Stage
             </div>
             <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.4rem; text-align: center;">
-              <div id="step-inquiry" class="step-pill" style="padding: 0.4rem; border-radius: var(--radius-sm); font-size: 0.72rem; font-weight: 700; background: rgba(14, 165, 233, 0.2); color: #38bdf8; border: 1px solid #0ea5e9;">1. Inquiry</div>
-              <div id="step-checking" class="step-pill" style="padding: 0.4rem; border-radius: var(--radius-sm); font-size: 0.72rem; font-weight: 700; background: rgba(255,255,255,0.04); color: var(--text-muted);">2. Checking</div>
-              <div id="step-ready" class="step-pill" style="padding: 0.4rem; border-radius: var(--radius-sm); font-size: 0.72rem; font-weight: 700; background: rgba(255,255,255,0.04); color: var(--text-muted);">3. Ready to Book</div>
-              <div id="step-confirmed" class="step-pill" style="padding: 0.4rem; border-radius: var(--radius-sm); font-size: 0.72rem; font-weight: 700; background: rgba(255,255,255,0.04); color: var(--text-muted);">4. Confirmed</div>
+              <div id="step-inquiry" class="step-pill" style="padding: 0.4rem; border-radius: var(--radius-sm); font-size: 0.72rem; font-weight: 700; background: #e0f2fe; color: #0284c7; border: 1px solid #7dd3fc;">1. Inquiry</div>
+              <div id="step-checking" class="step-pill" style="padding: 0.4rem; border-radius: var(--radius-sm); font-size: 0.72rem; font-weight: 700; background: #f1ede4; color: var(--text-muted); border: 1px solid var(--border-subtle);">2. Checking</div>
+              <div id="step-ready" class="step-pill" style="padding: 0.4rem; border-radius: var(--radius-sm); font-size: 0.72rem; font-weight: 700; background: #f1ede4; color: var(--text-muted); border: 1px solid var(--border-subtle);">3. Ready to Book</div>
+              <div id="step-confirmed" class="step-pill" style="padding: 0.4rem; border-radius: var(--radius-sm); font-size: 0.72rem; font-weight: 700; background: #f1ede4; color: var(--text-muted); border: 1px solid var(--border-subtle);">4. Confirmed</div>
             </div>
           </div>
 
           <!-- Extracted Entities -->
-          <div style="display: flex; flex-direction: column; gap: 0.2rem; background: rgba(0, 0, 0, 0.25); padding: 0.85rem 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
+          <div style="display: flex; flex-direction: column; gap: 0.2rem; background: #fbf9f5; padding: 0.85rem 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
             <div class="entity-row">
               <span class="entity-label">Target Property</span>
               <span id="entity-prop" class="entity-value">None</span>
             </div>
             <div class="entity-row">
-              <span class="entity-label">Micro-Location</span>
+              <span class="entity-label">Destination / Area</span>
               <span id="entity-loc" class="entity-value">None</span>
             </div>
             <div class="entity-row">
@@ -124,7 +124,7 @@ export function renderBotSimulator(container: HTMLElement, showToast: (msg: stri
 
           <!-- Dynamic Suggested Actions -->
           <div style="margin-top: 1.25rem;">
-            <div style="font-size: 0.82rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 0.5rem;">
+            <div style="font-size: 0.82rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 0.5rem;">
               Bot Suggested Reply Chips
             </div>
             <div id="dynamic-action-chips" style="display: flex; flex-wrap: wrap; gap: 0.45rem;">
@@ -135,13 +135,13 @@ export function renderBotSimulator(container: HTMLElement, showToast: (msg: stri
 
         <!-- Host Concierge Capabilities -->
         <div class="glass-card">
-          <h4 style="font-family: var(--font-heading); font-size: 1rem; font-weight: 700; margin-bottom: 0.6rem;">
+          <h4 style="font-family: var(--font-heading); font-size: 1.05rem; font-weight: 800; color: #0f172a; margin-bottom: 0.6rem;">
             🤖 Concierge Automation Highlights
           </h4>
-          <ul style="padding-left: 1.25rem; font-size: 0.85rem; color: var(--text-secondary); display: flex; flex-direction: column; gap: 0.4rem;">
-            <li><strong>Zero Platform Fees:</strong> Converts social & WhatsApp traffic directly to host reservations.</li>
-            <li><strong>Instant Availability Match:</strong> Understands natural inquiries like <em>"next weekend"</em> or <em>"3 nights in Anjuna"</em>.</li>
-            <li><strong>Polite Goan Host Persona:</strong> Speaks friendly Indian English and presents direct discounts for longer stays.</li>
+          <ul style="padding-left: 1.25rem; font-size: 0.88rem; color: var(--text-primary); display: flex; flex-direction: column; gap: 0.4rem;">
+            <li><strong>Zero Platform Fees:</strong> Converts social & WhatsApp traffic directly into 0% commission direct bookings.</li>
+            <li><strong>Instant Availability & Quotes:</strong> Understands natural inquiries like <em>"next weekend"</em> or <em>"3 nights in Manali"</em>.</li>
+            <li><strong>Polite Hospitality Persona:</strong> Speaks warm, polite English and offers direct incentives for longer stays.</li>
           </ul>
         </div>
       </div>
@@ -160,134 +160,118 @@ export function renderBotSimulator(container: HTMLElement, showToast: (msg: stri
         <div class="msg-time">${m.time}</div>
       </div>
     `).join('');
+
     chatContainer.scrollTop = chatContainer.scrollHeight;
   }
 
-  function updateInspector(intent: string, context: any, actions: string[]) {
+  function updateInspector() {
     const intentTag = container.querySelector('#inspector-intent-tag') as HTMLElement;
-    if (intentTag) intentTag.textContent = intent.toUpperCase();
+    if (intentTag) {
+      intentTag.innerText = currentIntent.toUpperCase();
+      intentTag.className = `intent-tag intent-${currentIntent}`;
+    }
 
-    const entityProp = container.querySelector('#entity-prop') as HTMLElement;
-    if (entityProp) entityProp.textContent = context.property || 'None';
+    const propEl = container.querySelector('#entity-prop') as HTMLElement;
+    const locEl = container.querySelector('#entity-loc') as HTMLElement;
+    const checkinEl = container.querySelector('#entity-checkin') as HTMLElement;
+    const checkoutEl = container.querySelector('#entity-checkout') as HTMLElement;
+    const guestsEl = container.querySelector('#entity-guests') as HTMLElement;
 
-    const entityLoc = container.querySelector('#entity-loc') as HTMLElement;
-    if (entityLoc) entityLoc.textContent = context.location || 'None';
+    if (propEl) propEl.innerText = currentContext.property || 'None';
+    if (locEl) locEl.innerText = currentContext.location || 'None';
+    if (checkinEl) checkinEl.innerText = currentContext.checkIn || 'Not specified';
+    if (checkoutEl) checkoutEl.innerText = currentContext.checkOut || 'Not specified';
+    if (guestsEl) guestsEl.innerText = currentContext.guests ? `${currentContext.guests} guests` : 'Not specified';
 
-    const entityCheckin = container.querySelector('#entity-checkin') as HTMLElement;
-    if (entityCheckin) entityCheckin.textContent = context.checkIn || 'Not specified';
-
-    const entityCheckout = container.querySelector('#entity-checkout') as HTMLElement;
-    if (entityCheckout) entityCheckout.textContent = context.checkOut || 'Not specified';
-
-    const entityGuests = container.querySelector('#entity-guests') as HTMLElement;
-    if (entityGuests) entityGuests.textContent = context.guests ? `${context.guests} Guests` : 'Not specified';
-
-    // Update progression stage
+    // Highlight active flow step
     const steps = ['inquiry', 'checking', 'ready', 'confirmed'];
-    const currentStage = context.status === 'ready_to_book' ? 'ready' : (context.status || 'inquiry');
+    const activeStep = currentContext.status === 'ready_to_book' ? 'ready' : currentContext.status || 'inquiry';
 
-    steps.forEach(st => {
-      const el = container.querySelector(`#step-${st}`) as HTMLElement;
+    steps.forEach(s => {
+      const el = container.querySelector(`#step-${s}`) as HTMLElement;
       if (el) {
-        if (st === currentStage) {
-          el.style.background = 'rgba(16, 185, 129, 0.2)';
-          el.style.color = '#34d399';
-          el.style.border = '1px solid #10b981';
+        if (s === activeStep || (activeStep === 'confirmed' && s !== 'inquiry')) {
+          el.style.background = '#e0f2fe';
+          el.style.color = '#0284c7';
+          el.style.borderColor = '#7dd3fc';
         } else {
-          el.style.background = 'rgba(255,255,255,0.04)';
+          el.style.background = '#f1ede4';
           el.style.color = 'var(--text-muted)';
-          el.style.border = 'none';
+          el.style.borderColor = 'var(--border-subtle)';
         }
       }
     });
 
-    // Update dynamic chips
+    // Render action chips
     const chipsContainer = container.querySelector('#dynamic-action-chips') as HTMLElement;
     if (chipsContainer) {
-      chipsContainer.innerHTML = actions.map(act => `
-        <button class="btn btn-secondary btn-sm bot-chip-btn" data-text="${act}" style="font-size: 0.75rem; padding: 0.3rem 0.65rem;">
-          ${act}
-        </button>
+      chipsContainer.innerHTML = suggestedActions.map(action => `
+        <span class="prompt-chip" data-prompt="${action}">⚡ ${action}</span>
       `).join('');
 
-      chipsContainer.querySelectorAll('.bot-chip-btn').forEach(b => {
-        b.addEventListener('click', () => {
-          const prompt = (b as HTMLElement).dataset.text || '';
-          inputField.value = prompt;
-          handleSend();
+      chipsContainer.querySelectorAll('.prompt-chip').forEach(chip => {
+        chip.addEventListener('click', () => {
+          const prompt = chip.getAttribute('data-prompt');
+          if (prompt) handleSendMessage(prompt);
         });
       });
     }
   }
 
-  async function handleSend() {
-    const text = inputField.value.trim();
-    if (!text) return;
+  async function handleSendMessage(text: string) {
+    if (!text.trim()) return;
 
-    inputField.value = '';
-    const nowTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-    messages.push({
-      sender: 'user',
-      text,
-      time: nowTime
-    });
+    const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    messages.push({ sender: 'user', text, time });
     renderMessages();
+    inputField.value = '';
 
-    // Show typing animation
-    const typingBubble = document.createElement('div');
-    typingBubble.className = 'message-bubble bubble-bot';
-    typingBubble.id = 'typing-bubble';
-    typingBubble.innerHTML = `
-      <div class="typing-indicator">
-        <div class="typing-dot"></div>
-        <div class="typing-dot"></div>
-        <div class="typing-dot"></div>
-      </div>
-    `;
-    chatContainer.appendChild(typingBubble);
-    chatContainer.scrollTop = chatContainer.scrollHeight;
+    // Show typing placeholder
+    const typingMsg: ChatMessage = {
+      sender: 'bot',
+      text: '✍️ Typing...',
+      time
+    };
+    messages.push(typingMsg);
+    renderMessages();
 
     try {
       const response: BotResponse = await api.sendBotMessage(text);
-      typingBubble.remove();
+      // Remove typing placeholder
+      messages.pop();
 
       messages.push({
         sender: 'bot',
         text: response.reply,
         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       });
-      renderMessages();
 
       currentIntent = response.intent;
-      currentContext = response.extractedData || currentContext;
-      suggestedActions = response.suggestedActions || [];
+      currentContext = { ...currentContext, ...response.extractedData };
+      suggestedActions = response.suggestedActions || ['View Stays', 'Check Rates', 'Book Stay'];
 
-      updateInspector(currentIntent, currentContext, suggestedActions);
+      renderMessages();
+      updateInspector();
     } catch (err) {
-      typingBubble.remove();
+      messages.pop();
       messages.push({
         sender: 'bot',
-        text: 'Sorry, I had a brief network glitch! Could you say that again?',
+        text: 'Sorry, I had trouble processing that message. Please try asking again!',
         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       });
       renderMessages();
-      showToast('Bot error: ' + (err as Error).message, 'error');
     }
   }
 
-  sendBtn?.addEventListener('click', handleSend);
-  inputField?.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') {
-      handleSend();
-    }
+  sendBtn?.addEventListener('click', () => handleSendMessage(inputField.value));
+  inputField?.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') handleSendMessage(inputField.value);
   });
 
-  // Quick prompt chips
-  container.querySelectorAll('.prompt-chip').forEach(chip => {
+  container.querySelectorAll('#quick-prompts-container .prompt-chip').forEach(chip => {
     chip.addEventListener('click', () => {
-      inputField.value = (chip as HTMLElement).dataset.prompt || '';
-      handleSend();
+      const prompt = chip.getAttribute('data-prompt');
+      if (prompt) handleSendMessage(prompt);
     });
   });
 
@@ -296,20 +280,18 @@ export function renderBotSimulator(container: HTMLElement, showToast: (msg: stri
     messages = [
       {
         sender: 'bot',
-        text: 'Namaste & Welcome to Wayzyy Goa! 🌴✨\n\nI\'m your 24/7 AI booking assistant for local host Rajesh. How can I help you plan your Goan stay today?',
+        text: 'Welcome to Wayzyy Guest Concierge! 🏡✨\n\nI\'m your 24/7 AI booking assistant. How can I help you discover, check dates, or reserve a vacation stay today?',
         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       }
     ];
     currentContext = { property: null, location: null, checkIn: null, checkOut: null, guests: null, status: 'inquiry' };
     currentIntent = 'general';
-    suggestedActions = ['Check Casa Azul', 'View Rates', 'Book Stay'];
-
+    suggestedActions = ['Check Casa Azul', 'Mountain Chalets', 'View Rates', 'Book Stay'];
     renderMessages();
-    updateInspector(currentIntent, currentContext, suggestedActions);
-    showToast('Conversation reset', 'success');
+    updateInspector();
+    showToast('Conversation reset successfully.', 'success');
   });
 
-  // Initial render
   renderMessages();
-  updateInspector(currentIntent, currentContext, suggestedActions);
+  updateInspector();
 }

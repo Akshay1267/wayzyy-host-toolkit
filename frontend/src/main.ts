@@ -35,10 +35,10 @@ function initApp() {
     <!-- Top Header -->
     <header class="top-header">
       <div class="brand-section">
-        <div class="brand-logo-badge">🌴</div>
+        <div class="brand-logo-badge">🏡</div>
         <div>
-          <div class="brand-title">Wayzyy <span style="font-size: 0.85rem; font-weight: 500; color: #38bdf8; padding: 0.15rem 0.5rem; background: rgba(14, 165, 233, 0.15); border-radius: 9999px; border: 1px solid rgba(14, 165, 233, 0.3);">Host Toolkit</span></div>
-          <div class="brand-subtitle">Goa Short-Term Rental AI & Revenue OS</div>
+          <div class="brand-title">Wayzyy <span style="font-size: 0.85rem; font-weight: 500; color: #0284c7; padding: 0.15rem 0.5rem; background: rgba(2, 132, 199, 0.1); border-radius: 9999px; border: 1px solid rgba(2, 132, 199, 0.25);">Host OS</span></div>
+          <div class="brand-subtitle">Short-Term Rental AI & Revenue Growth Toolkit</div>
         </div>
       </div>
 
@@ -52,7 +52,7 @@ function initApp() {
           <div class="host-avatar">RN</div>
           <div>
             <div class="host-info-name">Rajesh Naik</div>
-            <div class="host-info-role">Superhost • Goa (3 stays)</div>
+            <div class="host-info-role">Superhost • 4 Properties</div>
           </div>
         </div>
       </div>
@@ -164,7 +164,7 @@ function initApp() {
           `;
           statusPill.style.borderColor = '#bae6fd';
           statusPill.style.background = '#f0f9ff';
-          statusPill.title = 'Built-in Goan domain knowledge engine active';
+          statusPill.title = 'Built-in vacation rental domain knowledge engine active';
         }
       } else {
         throw new Error();

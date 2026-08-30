@@ -25,7 +25,7 @@ export async function renderPropertyManager(container: HTMLElement, showToast: (
         <div class="section-header">
           <div>
             <h1 class="section-title">Properties & Reservations</h1>
-            <p class="section-desc">Manage your Goa vacation listings, create direct WhatsApp bookings, and oversee calendar reservations.</p>
+            <p class="section-desc">Manage your vacation rental listings, create direct WhatsApp bookings, and oversee calendar reservations.</p>
           </div>
           <div style="display: flex; gap: 0.75rem;">
             <button id="btn-add-booking-modal" class="btn btn-emerald btn-sm">
@@ -55,9 +55,9 @@ export async function renderPropertyManager(container: HTMLElement, showToast: (
 
                   <div class="property-body">
                     <div class="property-name">${p.name}</div>
-                    <div class="property-loc">📍 ${p.location}, Goa • ${p.bedrooms} BHK (${p.max_guests} Guests)</div>
+                    <div class="property-loc">📍 ${p.location} • ${p.bedrooms} BHK (${p.max_guests} Guests)</div>
                     <p style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.5; height: 3.6em; overflow: hidden; text-overflow: ellipsis; margin-bottom: 0.75rem;">
-                      ${p.description || 'Charming Goan holiday stay.'}
+                      ${p.description || 'Charming vacation holiday stay.'}
                     </p>
 
                     <!-- Amenities tags -->
@@ -328,14 +328,14 @@ export async function renderPropertyManager(container: HTMLElement, showToast: (
         <div class="modal-overlay">
           <div class="modal-content">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
-              <h3 style="font-family: var(--font-heading); font-size: 1.25rem; font-weight: 700;">Add New Goa Listing</h3>
+              <h3 style="font-family: var(--font-heading); font-size: 1.25rem; font-weight: 700; color: #0f172a;">Add New Vacation Listing</h3>
               <button id="btn-close-modal" class="btn btn-secondary btn-sm">✕</button>
             </div>
 
             <form id="form-new-prop">
               <div class="form-group">
                 <label class="form-label">Property Name *</label>
-                <input type="text" id="prop-name" class="form-input" placeholder="e.g. Villa Sol & Mar" required />
+                <input type="text" id="prop-name" class="form-input" placeholder="e.g. Cedar Peak Chalet" required />
               </div>
 
               <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
@@ -343,14 +343,16 @@ export async function renderPropertyManager(container: HTMLElement, showToast: (
                   <label class="form-label">Property Type</label>
                   <select id="prop-type" class="form-select">
                     <option value="villa">Luxury Villa</option>
-                    <option value="heritage_room">Heritage Stay</option>
-                    <option value="beach_hut">Beachfront Hut</option>
-                    <option value="apartment">Modern Apartment</option>
+                    <option value="chalet">Mountain Chalet / Cabin</option>
+                    <option value="heritage_room">Heritage Stay / Haveli</option>
+                    <option value="beach_hut">Beachfront Stay</option>
+                    <option value="apartment">Modern Apartment / Penthouse</option>
+                    <option value="homestay">Farmstay / Homestay</option>
                   </select>
                 </div>
                 <div class="form-group">
-                  <label class="form-label">Location (Goa) *</label>
-                  <input type="text" id="prop-location" class="form-input" placeholder="e.g. Assagao" required />
+                  <label class="form-label">Destination / Location *</label>
+                  <input type="text" id="prop-location" class="form-input" placeholder="e.g. Old Manali, Himachal" required />
                 </div>
               </div>
 

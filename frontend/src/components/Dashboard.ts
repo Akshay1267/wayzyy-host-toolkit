@@ -20,7 +20,7 @@ export async function renderDashboard(container: HTMLElement, onNavigate: (tab: 
       <div class="section-header">
         <div>
           <h1 class="section-title">Host Performance & Intelligence</h1>
-          <p class="section-desc">Real-time revenue metrics, occupancy analytics, and market pacing for your Goa properties.</p>
+          <p class="section-desc">Real-time revenue metrics, occupancy analytics, and market pacing across your vacation rental portfolio.</p>
         </div>
         <div style="display: flex; gap: 0.75rem;">
           <button id="btn-quick-price" class="btn btn-primary btn-sm">
@@ -41,7 +41,7 @@ export async function renderDashboard(container: HTMLElement, onNavigate: (tab: 
           </div>
           <div class="kpi-value">₹${stats.totalRevenue.toLocaleString('en-IN')}</div>
           <div class="kpi-subtext">
-            <span>↗ +18.4% vs last month</span>
+            <span>↗ +22.4% vs last period</span>
           </div>
         </div>
 
@@ -52,7 +52,7 @@ export async function renderDashboard(container: HTMLElement, onNavigate: (tab: 
           </div>
           <div class="kpi-value">${stats.occupancyRate}%</div>
           <div class="kpi-subtext">
-            <span style="color: #0284c7;">● 4.2 nights avg stay</span>
+            <span style="color: #0284c7;">● 3.8 nights avg stay</span>
           </div>
         </div>
 
@@ -63,7 +63,7 @@ export async function renderDashboard(container: HTMLElement, onNavigate: (tab: 
           </div>
           <div class="kpi-value">${stats.totalBookings}</div>
           <div class="kpi-subtext">
-            <span style="color: #d97706;">● 3 WhatsApp direct leads</span>
+            <span style="color: #d97706;">● 5 direct WhatsApp leads</span>
           </div>
         </div>
 
@@ -74,7 +74,7 @@ export async function renderDashboard(container: HTMLElement, onNavigate: (tab: 
           </div>
           <div class="kpi-value">₹${stats.avgNightlyRate.toLocaleString('en-IN')}</div>
           <div class="kpi-subtext">
-            <span style="color: #7c3aed;">● Highest in Anjuna (₹4.8k)</span>
+            <span style="color: #7c3aed;">● Strongest in Villas & Chalets</span>
           </div>
         </div>
       </div>
@@ -86,7 +86,7 @@ export async function renderDashboard(container: HTMLElement, onNavigate: (tab: 
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
             <div>
               <h3 style="font-family: var(--font-heading); font-size: 1.25rem; font-weight: 800; color: #0f172a;">Revenue by Listing</h3>
-              <p style="font-size: 0.85rem; color: var(--text-muted);">Cumulative revenue across your 3 active Goa stays</p>
+              <p style="font-size: 0.85rem; color: var(--text-muted);">Cumulative revenue across your active listings</p>
             </div>
             <button id="btn-view-all-props" class="btn btn-secondary btn-sm">Manage Properties →</button>
           </div>
@@ -112,7 +112,7 @@ export async function renderDashboard(container: HTMLElement, onNavigate: (tab: 
           <div class="ai-advice-box">
             <div class="ai-sparkle-icon">✨</div>
             <div class="ai-advice-text">
-              <strong>Market Intelligence:</strong> Goa shoulder season is concluding. Demand in <strong>Anjuna & Vagator</strong> is trending up by +35% for October long weekends. Consider enabling 2-night minimum stay rules.
+              <strong>Market Intelligence:</strong> Holiday & festival season demand is trending up by +30% for upcoming long weekends across vacation destinations. Consider enabling a 2-night minimum stay rule for peak dates.
             </div>
           </div>
         </div>

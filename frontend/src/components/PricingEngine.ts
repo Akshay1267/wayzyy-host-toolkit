@@ -14,8 +14,8 @@ export async function renderPricingEngine(container: HTMLElement, showToast: (ms
     container.innerHTML = `
       <div class="section-header">
         <div>
-          <h1 class="section-title">Smart Dynamic Pricing Engine</h1>
-          <p class="section-desc">Algorithmically optimize your nightly rates based on Goa seasonality, micro-location tiers, amenities boost, and live market comparables.</p>
+          <h1 class="section-title">Smart Dynamic Pricing Studio</h1>
+          <p class="section-desc">Algorithmically optimize your nightly rates based on destination demand, seasonality, micro-location tiers, amenities boost, and live market comparables.</p>
         </div>
       </div>
 
@@ -33,7 +33,7 @@ export async function renderPricingEngine(container: HTMLElement, showToast: (ms
           <div class="form-group">
             <label class="form-label">Base Nightly Rate (₹ INR)</label>
             <div style="display: flex; gap: 0.75rem; align-items: center;">
-              <input type="number" id="input-base-rate" class="form-input" value="4500" min="500" max="50000" step="100" />
+              <input type="number" id="input-base-rate" class="form-input" value="4500" min="500" max="100000" step="100" />
             </div>
           </div>
 
@@ -42,34 +42,39 @@ export async function renderPricingEngine(container: HTMLElement, showToast: (ms
               <label class="form-label">Property Type</label>
               <select id="input-prop-type" class="form-select">
                 <option value="villa">Luxury Villa</option>
-                <option value="heritage_room">Heritage Stay</option>
-                <option value="beach_hut">Beachfront Hut</option>
-                <option value="apartment">Modern Apartment</option>
-                <option value="homestay">Goan Homestay</option>
+                <option value="chalet">Mountain Chalet / Cabin</option>
+                <option value="heritage_room">Heritage Stay / Haveli</option>
+                <option value="beach_hut">Beachfront Stay</option>
+                <option value="apartment">Modern Apartment / Penthouse</option>
+                <option value="homestay">Countryside Farmstay / Homestay</option>
               </select>
             </div>
 
             <div class="form-group">
-              <label class="form-label">Location (Goa)</label>
-              <select id="input-location" class="form-select">
-                <option value="Anjuna">Anjuna (Premium Tier)</option>
-                <option value="Vagator">Vagator (Premium Tier)</option>
-                <option value="Assagao">Assagao (Premium Tier)</option>
-                <option value="Fontainhas">Fontainhas (Premium Tier)</option>
-                <option value="Calangute">Calangute (Mid Tier)</option>
-                <option value="Candolim">Candolim (Mid Tier)</option>
-                <option value="Morjim">Morjim (Mid Tier)</option>
-                <option value="Palolem">Palolem (Budget Tier)</option>
-                <option value="Agonda">Agonda (Budget Tier)</option>
-                <option value="Arambol">Arambol (Budget Tier)</option>
-              </select>
+              <label class="form-label">Destination / Location</label>
+              <div style="display: flex; gap: 0.5rem;">
+                <input type="text" id="input-location" class="form-input" value="Anjuna, Goa" list="location-presets" placeholder="e.g. Manali, Bandra, Jaipur, Bali" />
+                <datalist id="location-presets">
+                  <option value="Anjuna, Goa">
+                  <option value="Old Manali, Himachal">
+                  <option value="Old City, Jaipur">
+                  <option value="Bandra West, Mumbai">
+                  <option value="Udaipur, Rajasthan">
+                  <option value="Coorg, Karnataka">
+                  <option value="Rishikesh, Uttarakhand">
+                  <option value="Alibaug, Maharashtra">
+                  <option value="Pondicherry">
+                  <option value="Seminyak, Bali">
+                  <option value="Downtown Dubai">
+                </datalist>
+              </div>
             </div>
           </div>
 
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;">
             <div class="form-group">
               <label class="form-label">Bedrooms</label>
-              <input type="number" id="input-bedrooms" class="form-input" value="2" min="1" max="10" />
+              <input type="number" id="input-bedrooms" class="form-input" value="2" min="1" max="15" />
             </div>
 
             <div class="form-group">
@@ -94,8 +99,16 @@ export async function renderPricingEngine(container: HTMLElement, showToast: (ms
                 <span>📶 High-Speed WiFi</span>
               </label>
               <label class="amenity-chip-label">
+                <input type="checkbox" value="mountain_view" />
+                <span>🏔️ Mountain View</span>
+              </label>
+              <label class="amenity-chip-label">
                 <input type="checkbox" value="sea_view" />
                 <span>🌊 Sea View</span>
+              </label>
+              <label class="amenity-chip-label">
+                <input type="checkbox" value="fireplace" />
+                <span>🔥 Fireplace</span>
               </label>
               <label class="amenity-chip-label">
                 <input type="checkbox" value="kitchen" />
@@ -113,6 +126,14 @@ export async function renderPricingEngine(container: HTMLElement, showToast: (ms
                 <input type="checkbox" value="garden" />
                 <span>🌿 Garden</span>
               </label>
+              <label class="amenity-chip-label">
+                <input type="checkbox" value="jacuzzi" />
+                <span>🛁 Jacuzzi</span>
+              </label>
+              <label class="amenity-chip-label">
+                <input type="checkbox" value="bbq" />
+                <span>🥩 BBQ Grill</span>
+              </label>
             </div>
           </div>
 
@@ -124,9 +145,9 @@ export async function renderPricingEngine(container: HTMLElement, showToast: (ms
         <!-- Right: Real-time Calculation Result -->
         <div id="pricing-results-container">
           <div class="glass-card" style="text-align: center; padding: 3.5rem;">
-            <div style="font-size: 2.8rem; margin-bottom: 1rem;">🌴</div>
+            <div style="font-size: 2.8rem; margin-bottom: 1rem;">🏡</div>
             <div style="font-size: 1.2rem; font-weight: 700; color: #0f172a;">Ready to optimize pricing</div>
-            <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0.5rem;">Select your parameters or pick an existing property and click "Calculate Optimal Rate".</p>
+            <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0.5rem;">Select your parameters or pick an existing listing and click "Calculate Optimal Rate".</p>
           </div>
         </div>
       </div>
@@ -157,7 +178,7 @@ export async function renderPricingEngine(container: HTMLElement, showToast: (ms
       if (prop) {
         (container.querySelector('#input-base-rate') as HTMLInputElement).value = String(prop.base_rate);
         (container.querySelector('#input-prop-type') as HTMLSelectElement).value = prop.property_type;
-        (container.querySelector('#input-location') as HTMLSelectElement).value = prop.location;
+        (container.querySelector('#input-location') as HTMLInputElement).value = prop.location;
         (container.querySelector('#input-bedrooms') as HTMLInputElement).value = String(prop.bedrooms);
 
         container.querySelectorAll('.amenity-chip-label input').forEach(input => {
@@ -185,13 +206,13 @@ export async function renderPricingEngine(container: HTMLElement, showToast: (ms
       resultsContainer.innerHTML = `
         <div class="glass-card" style="text-align: center; padding: 3.5rem;">
           <div class="status-dot" style="margin: 0 auto 1rem; width: 16px; height: 16px;"></div>
-          <div style="font-weight: 700; font-size: 1.05rem; color: #0f172a;">Analyzing Goa Market Trends & Factors with Claude AI...</div>
+          <div style="font-weight: 700; font-size: 1.05rem; color: #0f172a;">Analyzing Market Trends & Destination Factors with AI...</div>
         </div>
       `;
 
       const baseRate = Number((container.querySelector('#input-base-rate') as HTMLInputElement).value) || 4500;
       const propertyType = (container.querySelector('#input-prop-type') as HTMLSelectElement).value;
-      const location = (container.querySelector('#input-location') as HTMLSelectElement).value;
+      const location = (container.querySelector('#input-location') as HTMLInputElement).value || 'Vacation Stay';
       const bedrooms = Number((container.querySelector('#input-bedrooms') as HTMLInputElement).value) || 1;
       const checkIn = (container.querySelector('#input-check-in') as HTMLInputElement).value;
 
@@ -264,7 +285,7 @@ export async function renderPricingEngine(container: HTMLElement, showToast: (ms
           <div class="ai-advice-box">
             <div class="ai-sparkle-icon">💡</div>
             <div class="ai-advice-text">
-              <strong>Goa Host Advisor:</strong> ${result.explanation}
+              <strong>Revenue Strategist Advisor:</strong> ${result.explanation}
             </div>
           </div>
 
@@ -278,7 +299,7 @@ export async function renderPricingEngine(container: HTMLElement, showToast: (ms
         <!-- Market Comparables -->
         <div class="glass-card">
           <h4 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 800; color: #0f172a; margin-bottom: 1rem;">
-            Goa Market Benchmark Comparables
+            Destination Benchmark Comparables
           </h4>
           <div class="custom-table-container">
             <table class="custom-table">
