@@ -1,0 +1,106 @@
+{
+  "comparables": [
+    {
+      "name": "Beach Paradise Villa",
+      "type": "villa",
+      "location": "Anjuna",
+      "bedrooms": 2,
+      "rate": 5200,
+      "amenities": ["pool", "ac", "wifi", "kitchen", "parking"],
+      "rating": 4.6,
+      "occupancy": 0.72
+    },
+    {
+      "name": "Ocean Breeze Apartment",
+      "type": "apartment",
+      "location": "Calangute",
+      "bedrooms": 1,
+      "rate": 3100,
+      "amenities": ["ac", "wifi", "kitchen"],
+      "rating": 4.3,
+      "occupancy": 0.68
+    },
+    {
+      "name": "Heritage Charm Room",
+      "type": "heritage_room",
+      "location": "Fontainhas",
+      "bedrooms": 1,
+      "rate": 3200,
+      "amenities": ["ac", "wifi", "breakfast"],
+      "rating": 4.8,
+      "occupancy": 0.81
+    },
+    {
+      "name": "Vagator Cliff House",
+      "type": "villa",
+      "location": "Vagator",
+      "bedrooms": 3,
+      "rate": 6800,
+      "amenities": ["pool", "ac", "wifi", "kitchen", "sea_view", "parking"],
+      "rating": 4.7,
+      "occupancy": 0.75
+    },
+    {
+      "name": "Palolem Beach Hut Deluxe",
+      "type": "beach_hut",
+      "location": "Palolem",
+      "bedrooms": 1,
+      "rate": 2200,
+      "amenities": ["wifi", "sea_view"],
+      "rating": 4.2,
+      "occupancy": 0.65
+    },
+    {
+      "name": "Morjim Surf Stay",
+      "type": "homestay",
+      "location": "Morjim",
+      "bedrooms": 1,
+      "rate": 1800,
+      "amenities": ["wifi", "breakfast", "parking"],
+      "rating": 4.1,
+      "occupancy": 0.58
+    },
+    {
+      "name": "Candolim Luxury Suite",
+      "type": "apartment",
+      "location": "Candolim",
+      "bedrooms": 2,
+      "rate": 4500,
+      "amenities": ["pool", "ac", "wifi", "gym", "parking"],
+      "rating": 4.5,
+      "occupancy": 0.70
+    },
+    {
+      "name": "Assagao Garden Villa",
+      "type": "villa",
+      "location": "Assagao",
+      "bedrooms": 2,
+      "rate": 5500,
+      "amenities": ["pool", "ac", "wifi", "kitchen", "garden"],
+      "rating": 4.9,
+      "occupancy": 0.85
+    }
+  ],
+  "seasonMultipliers": {
+    "peak": { "months": [12, 1, 2], "multiplier": 1.8, "label": "Peak Season (Dec-Feb)" },
+    "high": { "months": [10, 11, 3], "multiplier": 1.3, "label": "High Season (Oct-Nov, Mar)" },
+    "shoulder": { "months": [4, 5, 9], "multiplier": 1.0, "label": "Shoulder Season (Apr-May, Sep)" },
+    "monsoon": { "months": [6, 7, 8], "multiplier": 0.6, "label": "Monsoon Season (Jun-Aug)" }
+  },
+  "locationTiers": {
+    "premium": ["Anjuna", "Vagator", "Assagao", "Fontainhas"],
+    "mid": ["Calangute", "Candolim", "Baga", "Morjim"],
+    "budget": ["Palolem", "Agonda", "Arambol", "Mapusa"]
+  },
+  "amenityBoosts": {
+    "pool": 0.20,
+    "ac": 0.10,
+    "wifi": 0.05,
+    "kitchen": 0.08,
+    "sea_view": 0.15,
+    "parking": 0.03,
+    "breakfast": 0.07,
+    "gym": 0.05,
+    "garden": 0.06
+  }
+}
