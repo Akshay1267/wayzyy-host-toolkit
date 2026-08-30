@@ -123,5 +123,7 @@ export interface HealthResponse {
   time?: string;
   llmConfigured?: boolean;
   llmWorking?: boolean;
+  llmProvider?: 'gemini' | 'claude' | 'fallback';
+  llmModel?: string | null;
   llmError?: string | null;
 }

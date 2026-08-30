@@ -142,13 +142,14 @@ function initApp() {
       const health = await api.checkHealth();
       if (health.status === 'ok') {
         if (health.llmWorking) {
+          const providerLabel = health.llmProvider === 'gemini' ? 'Gemini AI' : health.llmProvider === 'claude' ? 'Claude AI' : 'Live AI';
           statusPill.innerHTML = `
             <div class="status-dot" style="background: #059669; box-shadow: 0 0 6px rgba(5, 150, 105, 0.4);"></div>
-            <span style="font-weight: 700; color: #065f46;">API Connected (Claude AI)</span>
+            <span style="font-weight: 700; color: #065f46;">API Connected (${providerLabel})</span>
           `;
           statusPill.style.borderColor = '#a7f3d0';
           statusPill.style.background = '#ecfdf5';
-          statusPill.title = 'Live Anthropic Claude 3.5 Sonnet API active & responsive';
+          statusPill.title = `Live ${health.llmModel || providerLabel} active & responding!`;
         } else if (health.llmConfigured) {
           statusPill.innerHTML = `
             <div class="status-dot" style="background: #d97706; box-shadow: 0 0 6px rgba(217, 119, 6, 0.4);"></div>
@@ -156,7 +157,7 @@ function initApp() {
           `;
           statusPill.style.borderColor = '#fde68a';
           statusPill.style.background = '#fef3c7';
-          statusPill.title = health.llmError ? `Claude key issue: ${health.llmError} (Fallback engine active)` : 'Fallback engine active';
+          statusPill.title = health.llmError ? `AI key notice: ${health.llmError} (Fallback engine active)` : 'Fallback engine active';
         } else {
           statusPill.innerHTML = `
             <div class="status-dot" style="background: #0284c7; box-shadow: 0 0 6px rgba(2, 132, 199, 0.4);"></div>

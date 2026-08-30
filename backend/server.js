@@ -31,17 +31,22 @@ app.use((req, res, next) => {
   next();
 });
 
-// Health check with active LLM verification
+// Health check with active LLM verification (Gemini + Claude)
 app.get('/api/health', async (req, res) => {
   const forceCheck = req.query.check === 'true';
   const llmStatus = await testConnection(forceCheck);
+
+  const hasGemini = Boolean(process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY.trim() !== '');
+  const hasClaude = Boolean(process.env.ANTHROPIC_API_KEY && process.env.ANTHROPIC_API_KEY.trim() !== '');
 
   res.json({
     status: 'ok',
     service: 'Wayzyy Host Toolkit API',
     time: new Date().toISOString(),
-    llmConfigured: Boolean(process.env.ANTHROPIC_API_KEY && process.env.ANTHROPIC_API_KEY.trim() !== ''),
+    llmConfigured: hasGemini || hasClaude,
     llmWorking: llmStatus.working,
+    llmProvider: llmStatus.provider, // 'gemini' | 'claude' | 'fallback'
+    llmModel: llmStatus.model || null,
     llmError: llmStatus.error
   });
 });

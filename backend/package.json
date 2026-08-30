@@ -8,12 +8,18 @@
     "dev": "node server.js",
     "seed": "node db/seed.js"
   },
-  "keywords": ["wayzyy", "host-toolkit", "pricing-engine", "whatsapp-bot"],
+  "keywords": [
+    "wayzyy",
+    "host-toolkit",
+    "pricing-engine",
+    "whatsapp-bot"
+  ],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
     "@anthropic-ai/sdk": "^0.122.0",
+    "@google/generative-ai": "^0.24.1",
     "better-sqlite3": "^13.0.3",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
