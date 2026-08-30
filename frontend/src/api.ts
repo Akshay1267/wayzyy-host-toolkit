@@ -10,7 +10,16 @@ import type {
   HealthResponse
 } from './types';
 
-const API_BASE = (import.meta as any).env?.VITE_API_URL || 'http://localhost:5000/api';
+function getApiBase(): string {
+  const envUrl = (import.meta as any).env?.VITE_API_URL;
+  if (envUrl && envUrl.trim() !== '') return envUrl;
+  if (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+    return 'https://wayzyy-host-toolkit.onrender.com/api';
+  }
+  return 'http://localhost:5000/api';
+}
+
+const API_BASE = getApiBase();
 
 async function request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
   const url = `${API_BASE}${endpoint}`;
