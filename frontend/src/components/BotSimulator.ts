@@ -34,12 +34,26 @@ export function renderBotSimulator(container: HTMLElement, showToast: (msg: stri
         <h1 class="section-title">WhatsApp AI Booking Concierge</h1>
         <p class="section-desc">Test the autonomous 24/7 guest concierge that qualifies guest leads, checks real-time dates, and closes direct reservations on WhatsApp.</p>
       </div>
-      <button id="btn-reset-chat" class="btn btn-secondary btn-sm">🔄 Reset Conversation</button>
+      <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
+        <!-- Phone Viewport Size Switcher -->
+        <div class="screen-size-group">
+          <button class="size-btn active-size-btn" data-size="default">📱 Phone</button>
+          <button class="size-btn" data-size="xl">📲 Large</button>
+          <button class="size-btn" data-size="wide">💻 Wide</button>
+        </div>
+        <button id="btn-reset-chat" class="btn btn-secondary btn-sm">🔄 Reset Chat</button>
+      </div>
     </div>
 
-    <div class="whatsapp-layout">
+    <div id="wa-layout-container" class="whatsapp-layout">
       <!-- Left: Mobile Phone Simulation -->
       <div class="phone-mockup">
+        <!-- Phone Camera Notch Bar -->
+        <div class="phone-notch-bar">
+          <div class="phone-camera-lens"></div>
+          <div class="phone-speaker-grill"></div>
+        </div>
+
         <!-- Phone Header -->
         <div class="phone-header">
           <div class="phone-avatar">🏡</div>
@@ -54,7 +68,7 @@ export function renderBotSimulator(container: HTMLElement, showToast: (msg: stri
 
         <!-- Chat Stream -->
         <div id="chat-messages-container" class="chat-messages">
-          <!-- Messages will be rendered here -->
+          <!-- Messages rendered here -->
         </div>
 
         <!-- Quick Prompts Bar -->
@@ -68,7 +82,7 @@ export function renderBotSimulator(container: HTMLElement, showToast: (msg: stri
         <!-- Input Bar -->
         <div class="phone-input-bar">
           <input type="text" id="phone-chat-input" class="phone-input-field" placeholder="Type a message as a guest..." />
-          <button id="phone-chat-send" class="phone-send-btn">
+          <button id="phone-chat-send" class="phone-send-btn" title="Send message" aria-label="Send">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
           </button>
         </div>
@@ -77,9 +91,9 @@ export function renderBotSimulator(container: HTMLElement, showToast: (msg: stri
       <!-- Right: AI Intent & Context Inspector -->
       <div style="display: flex; flex-direction: column; gap: 1.5rem;">
         <div class="glass-card">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.35rem;">
             <div>
-              <h3 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 800; color: #0f172a;">Live AI Entity & Intent Inspector</h3>
+              <h3 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 800; color: var(--text-primary);">Live AI Entity & Intent Inspector</h3>
               <p style="font-size: 0.8rem; color: var(--text-muted);">Real-time semantic extraction from guest dialogue</p>
             </div>
             <span id="inspector-intent-tag" class="intent-tag">GENERAL</span>
@@ -87,19 +101,19 @@ export function renderBotSimulator(container: HTMLElement, showToast: (msg: stri
 
           <!-- Booking Progression Status -->
           <div style="margin-bottom: 1.5rem;">
-            <div style="font-size: 0.82rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 0.5rem;">
+            <div style="font-size: 0.82rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.5px;">
               Booking Flow Stage
             </div>
-            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.4rem; text-align: center;">
-              <div id="step-inquiry" class="step-pill" style="padding: 0.4rem; border-radius: var(--radius-sm); font-size: 0.72rem; font-weight: 700; background: #e0f2fe; color: #0284c7; border: 1px solid #7dd3fc;">1. Inquiry</div>
-              <div id="step-checking" class="step-pill" style="padding: 0.4rem; border-radius: var(--radius-sm); font-size: 0.72rem; font-weight: 700; background: #f1ede4; color: var(--text-muted); border: 1px solid var(--border-subtle);">2. Checking</div>
-              <div id="step-ready" class="step-pill" style="padding: 0.4rem; border-radius: var(--radius-sm); font-size: 0.72rem; font-weight: 700; background: #f1ede4; color: var(--text-muted); border: 1px solid var(--border-subtle);">3. Ready to Book</div>
-              <div id="step-confirmed" class="step-pill" style="padding: 0.4rem; border-radius: var(--radius-sm); font-size: 0.72rem; font-weight: 700; background: #f1ede4; color: var(--text-muted); border: 1px solid var(--border-subtle);">4. Confirmed</div>
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.45rem; text-align: center;">
+              <div id="step-inquiry" class="step-pill" style="padding: 0.45rem 0.25rem; border-radius: var(--radius-sm); font-size: 0.74rem; font-weight: 700; background: var(--accent-ocean-soft); color: var(--accent-ocean); border: 1px solid var(--accent-ocean-border);">1. Inquiry</div>
+              <div id="step-checking" class="step-pill" style="padding: 0.45rem 0.25rem; border-radius: var(--radius-sm); font-size: 0.74rem; font-weight: 700; background: var(--bg-surface-soft); color: var(--text-muted); border: 1px solid var(--border-subtle);">2. Checking</div>
+              <div id="step-ready" class="step-pill" style="padding: 0.45rem 0.25rem; border-radius: var(--radius-sm); font-size: 0.74rem; font-weight: 700; background: var(--bg-surface-soft); color: var(--text-muted); border: 1px solid var(--border-subtle);">3. Ready</div>
+              <div id="step-confirmed" class="step-pill" style="padding: 0.45rem 0.25rem; border-radius: var(--radius-sm); font-size: 0.74rem; font-weight: 700; background: var(--bg-surface-soft); color: var(--text-muted); border: 1px solid var(--border-subtle);">4. Confirmed</div>
             </div>
           </div>
 
           <!-- Extracted Entities -->
-          <div style="display: flex; flex-direction: column; gap: 0.2rem; background: #fbf9f5; padding: 0.85rem 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
+          <div style="display: flex; flex-direction: column; gap: 0.2rem; background: var(--bg-surface-soft); padding: 0.95rem 1.15rem; border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
             <div class="entity-row">
               <span class="entity-label">Target Property</span>
               <span id="entity-prop" class="entity-value">None</span>
@@ -123,8 +137,8 @@ export function renderBotSimulator(container: HTMLElement, showToast: (msg: stri
           </div>
 
           <!-- Dynamic Suggested Actions -->
-          <div style="margin-top: 1.25rem;">
-            <div style="font-size: 0.82rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 0.5rem;">
+          <div style="margin-top: 1.35rem;">
+            <div style="font-size: 0.82rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.5px;">
               Bot Suggested Reply Chips
             </div>
             <div id="dynamic-action-chips" style="display: flex; flex-wrap: wrap; gap: 0.45rem;">
@@ -135,10 +149,10 @@ export function renderBotSimulator(container: HTMLElement, showToast: (msg: stri
 
         <!-- Host Concierge Capabilities -->
         <div class="glass-card">
-          <h4 style="font-family: var(--font-heading); font-size: 1.05rem; font-weight: 800; color: #0f172a; margin-bottom: 0.6rem;">
+          <h4 style="font-family: var(--font-heading); font-size: 1.05rem; font-weight: 800; color: var(--text-primary); margin-bottom: 0.65rem;">
             🤖 Concierge Automation Highlights
           </h4>
-          <ul style="padding-left: 1.25rem; font-size: 0.88rem; color: var(--text-primary); display: flex; flex-direction: column; gap: 0.4rem;">
+          <ul style="padding-left: 1.25rem; font-size: 0.88rem; color: var(--text-secondary); display: flex; flex-direction: column; gap: 0.45rem;">
             <li><strong>Zero Platform Fees:</strong> Converts social & WhatsApp traffic directly into 0% commission direct bookings.</li>
             <li><strong>Instant Availability & Quotes:</strong> Understands natural inquiries like <em>"next weekend"</em> or <em>"3 nights in Manali"</em>.</li>
             <li><strong>Polite Hospitality Persona:</strong> Speaks warm, polite English and offers direct incentives for longer stays.</li>
@@ -147,6 +161,17 @@ export function renderBotSimulator(container: HTMLElement, showToast: (msg: stri
       </div>
     </div>
   `;
+
+  const layoutContainer = container.querySelector('#wa-layout-container') as HTMLElement;
+  const sizeBtns = container.querySelectorAll('.size-btn');
+  sizeBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      sizeBtns.forEach(b => b.classList.remove('active-size-btn'));
+      btn.classList.add('active-size-btn');
+      const size = btn.getAttribute('data-size');
+      layoutContainer.className = `whatsapp-layout ${size === 'xl' ? 'size-xl' : size === 'wide' ? 'size-wide' : 'size-lg'}`;
+    });
+  });
 
   const chatContainer = container.querySelector('#chat-messages-container') as HTMLElement;
   const inputField = container.querySelector('#phone-chat-input') as HTMLInputElement;
@@ -191,11 +216,11 @@ export function renderBotSimulator(container: HTMLElement, showToast: (msg: stri
       const el = container.querySelector(`#step-${s}`) as HTMLElement;
       if (el) {
         if (s === activeStep || (activeStep === 'confirmed' && s !== 'inquiry')) {
-          el.style.background = '#e0f2fe';
-          el.style.color = '#0284c7';
-          el.style.borderColor = '#7dd3fc';
+          el.style.background = 'var(--accent-ocean-soft)';
+          el.style.color = 'var(--accent-ocean)';
+          el.style.borderColor = 'var(--accent-ocean-border)';
         } else {
-          el.style.background = '#f1ede4';
+          el.style.background = 'var(--bg-surface-soft)';
           el.style.color = 'var(--text-muted)';
           el.style.borderColor = 'var(--border-subtle)';
         }

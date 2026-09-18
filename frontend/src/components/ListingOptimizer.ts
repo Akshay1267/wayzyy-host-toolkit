@@ -3,8 +3,8 @@ import type { ListingResult, ImageAssessment } from '../types';
 
 export async function renderListingOptimizer(container: HTMLElement, showToast: (msg: string, type?: 'success' | 'error') => void) {
   container.innerHTML = `
-    <div style="display: flex; justify-content: center; padding: 3rem;">
-      <div class="status-dot" style="width: 16px; height: 16px;"></div>
+    <div style="display: flex; justify-content: center; padding: 4rem;">
+      <div class="status-dot" style="width: 18px; height: 18px;"></div>
     </div>
   `;
 
@@ -30,7 +30,7 @@ export async function renderListingOptimizer(container: HTMLElement, showToast: 
         <!-- Left: Form -->
         <div class="glass-card">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
-            <h3 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700; color: #0f172a;">Property Details</h3>
+            <h3 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700; color: var(--text-primary);">Property Details</h3>
             <select id="listing-preset-select" class="form-select" style="width: auto; padding: 0.35rem 0.75rem; font-size: 0.8rem; font-weight: 600;">
               <option value="">⚡ Load Listing...</option>
               ${properties.map(p => `<option value="${p.id}">${p.name}</option>`).join('')}
@@ -140,7 +140,7 @@ export async function renderListingOptimizer(container: HTMLElement, showToast: 
         <div id="listing-output-container">
           <div class="glass-card" style="text-align: center; padding: 3rem;">
             <div style="font-size: 2.5rem; margin-bottom: 1rem;">✍️</div>
-            <div style="font-size: 1.1rem; font-weight: 700; color: #0f172a;">AI Copy Assistant Ready</div>
+            <div style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary);">AI Copy Assistant Ready</div>
             <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem;">Click "Generate AI Listing Copy" to craft catchy titles, sensory descriptions, and high-ranking search tags.</p>
           </div>
         </div>
@@ -149,15 +149,15 @@ export async function renderListingOptimizer(container: HTMLElement, showToast: 
       <!-- Section 2: Photo & Staging Auditor (Hidden by default) -->
       <div id="section-photo-auditor" style="display: none; grid-template-columns: 1fr 1fr; gap: 1.75rem; align-items: start;">
         <div class="glass-card">
-          <h3 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700; color: #0f172a; margin-bottom: 1rem;">Listing Photo Review</h3>
+          <h3 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.75rem;">Listing Photo Review</h3>
           <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.25rem;">Select a property photo or paste an image URL to receive automated architectural lighting, staging, and composition ratings.</p>
 
           <div class="form-group">
             <label class="form-label">Sample Staging Photo</label>
             <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; margin-bottom: 1rem;">
-              <img src="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=400&q=80" class="sample-photo-thumb active" data-url="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=800&q=80" style="width: 100%; height: 75px; object-fit: cover; border-radius: var(--radius-sm); cursor: pointer; border: 2px solid #0284c7;" />
-              <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=400&q=80" class="sample-photo-thumb" data-url="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=800&q=80" style="width: 100%; height: 75px; object-fit: cover; border-radius: var(--radius-sm); cursor: pointer; border: 2px solid transparent;" />
-              <img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=400&q=80" class="sample-photo-thumb" data-url="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80" style="width: 100%; height: 75px; object-fit: cover; border-radius: var(--radius-sm); cursor: pointer; border: 2px solid transparent;" />
+              <img src="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=400&q=80" class="sample-photo-thumb active" data-url="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=800&q=80" />
+              <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=400&q=80" class="sample-photo-thumb" data-url="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=800&q=80" />
+              <img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=400&q=80" class="sample-photo-thumb" data-url="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80" />
             </div>
           </div>
 
@@ -178,7 +178,7 @@ export async function renderListingOptimizer(container: HTMLElement, showToast: 
         <div id="photo-assessment-container">
           <div class="glass-card" style="text-align: center; padding: 3rem;">
             <div style="font-size: 2.5rem; margin-bottom: 1rem;">📷</div>
-            <div style="font-size: 1.1rem; font-weight: 700; color: #0f172a;">Photo Auditor Ready</div>
+            <div style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary);">Photo Auditor Ready</div>
             <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem;">Click "Audit Photo Staging Quality" to evaluate architectural lighting, symmetry, and guest conversion readiness.</p>
           </div>
         </div>
@@ -252,9 +252,9 @@ export async function renderListingOptimizer(container: HTMLElement, showToast: 
     async function doGenerateCopy() {
       const outContainer = container.querySelector('#listing-output-container') as HTMLElement;
       outContainer.innerHTML = `
-        <div class="glass-card" style="text-align: center; padding: 3rem;">
-          <div class="status-dot" style="margin: 0 auto 1rem; width: 16px; height: 16px;"></div>
-          <div style="font-weight: 700; font-size: 1.05rem; color: #0f172a;">Writing High-Converting Listing Copy with AI...</div>
+        <div class="glass-card" style="text-align: center; padding: 3.5rem;">
+          <div class="status-dot" style="margin: 0 auto 1rem; width: 18px; height: 18px;"></div>
+          <div style="font-weight: 700; font-size: 1.05rem; color: var(--text-primary);">Writing High-Converting Listing Copy with AI...</div>
         </div>
       `;
 
@@ -286,9 +286,9 @@ export async function renderListingOptimizer(container: HTMLElement, showToast: 
         renderListingOutput(outContainer, result);
       } catch (err) {
         outContainer.innerHTML = `
-          <div class="glass-card" style="text-align: center; padding: 2rem;">
-            <div style="color: #e11d48; font-weight: 700;">Generation Error</div>
-            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem;">${(err as Error).message}</p>
+          <div class="glass-card" style="text-align: center; padding: 2.5rem;">
+            <div style="color: var(--accent-rose); font-weight: 700;">Generation Error</div>
+            <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 0.5rem;">${(err as Error).message}</p>
           </div>
         `;
       }
@@ -298,10 +298,10 @@ export async function renderListingOptimizer(container: HTMLElement, showToast: 
       target.innerHTML = `
         <div class="glass-card" style="margin-bottom: 1.5rem;">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-            <h4 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 800; color: #0f172a;">
+            <h4 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 800; color: var(--text-primary);">
               ✨ Catchy Listing Headlines (3 Variations)
             </h4>
-            <span style="font-size: 0.75rem; color: #0284c7; font-weight: 700; text-transform: uppercase;">Click to Copy</span>
+            <span style="font-size: 0.75rem; color: var(--accent-ocean); font-weight: 700; text-transform: uppercase;">Click to Copy</span>
           </div>
 
           <div style="display: flex; flex-direction: column; gap: 0.75rem;">
@@ -309,7 +309,7 @@ export async function renderListingOptimizer(container: HTMLElement, showToast: 
               <div class="title-option-box" data-copy="${title.replace(/"/g, '&quot;')}">
                 <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 0.75rem;">
                   <div>
-                    <span style="font-size: 0.72rem; font-weight: 800; color: #0284c7; text-transform: uppercase;">Option ${i + 1}</span>
+                    <span style="font-size: 0.72rem; font-weight: 800; color: var(--accent-ocean); text-transform: uppercase;">Option ${i + 1}</span>
                     <div style="font-weight: 700; color: var(--text-primary); margin-top: 0.2rem; font-size: 0.95rem;">${title}</div>
                   </div>
                   <button class="btn-copy-mini" title="Copy to Clipboard">📋</button>
@@ -321,28 +321,28 @@ export async function renderListingOptimizer(container: HTMLElement, showToast: 
 
         <div class="glass-card" style="margin-bottom: 1.5rem;">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
-            <h4 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 800; color: #0f172a;">
+            <h4 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 800; color: var(--text-primary);">
               📖 Compelling Listing Description
             </h4>
             <button id="btn-copy-desc" class="btn btn-secondary btn-sm" style="font-size: 0.78rem;">📋 Copy Text</button>
           </div>
-          <div style="background: #faf8f5; border: 1px solid #f1ede4; border-radius: var(--radius-md); padding: 1.2rem; font-size: 0.9rem; line-height: 1.65; color: var(--text-primary); white-space: pre-line;">
+          <div style="background: var(--bg-surface-soft); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 1.25rem; font-size: 0.92rem; line-height: 1.65; color: var(--text-primary); white-space: pre-line;">
             ${result.description}
           </div>
         </div>
 
         <div class="glass-card">
-          <h4 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 800; color: #0f172a; margin-bottom: 0.75rem;">
+          <h4 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 800; color: var(--text-primary); margin-bottom: 0.75rem;">
             🏷️ Search Engine & Channel Tags
           </h4>
           <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.25rem;">
             ${result.tags.map(t => `<span class="badge-tag">#${t}</span>`).join('')}
           </div>
 
-          <h4 style="font-family: var(--font-heading); font-size: 1.05rem; font-weight: 800; color: #0f172a; margin-bottom: 0.6rem;">
+          <h4 style="font-family: var(--font-heading); font-size: 1.05rem; font-weight: 800; color: var(--text-primary); margin-bottom: 0.6rem;">
             ⭐ Signature Property Highlights
           </h4>
-          <ul style="padding-left: 1.2rem; font-size: 0.88rem; color: var(--text-primary); display: flex; flex-direction: column; gap: 0.4rem;">
+          <ul style="padding-left: 1.2rem; font-size: 0.88rem; color: var(--text-secondary); display: flex; flex-direction: column; gap: 0.4rem;">
             ${result.highlights.map(h => `<li>${h}</li>`).join('')}
           </ul>
         </div>
@@ -370,10 +370,8 @@ export async function renderListingOptimizer(container: HTMLElement, showToast: 
     photoThumbs.forEach(thumb => {
       thumb.addEventListener('click', () => {
         photoThumbs.forEach(t => {
-          (t as HTMLElement).style.borderColor = 'transparent';
           t.classList.remove('active');
         });
-        (thumb as HTMLElement).style.borderColor = '#0284c7';
         thumb.classList.add('active');
         const url = thumb.getAttribute('data-url') || '';
         photoInput.value = url;
@@ -395,8 +393,8 @@ export async function renderListingOptimizer(container: HTMLElement, showToast: 
 
       assessmentContainer.innerHTML = `
         <div class="glass-card" style="text-align: center; padding: 3rem;">
-          <div class="status-dot" style="margin: 0 auto 1rem; width: 16px; height: 16px;"></div>
-          <div style="font-weight: 700; font-size: 1.05rem; color: #0f172a;">Auditing Staging & Architectural Lighting...</div>
+          <div class="status-dot" style="margin: 0 auto 1rem; width: 18px; height: 18px;"></div>
+          <div style="font-weight: 700; font-size: 1.05rem; color: var(--text-primary);">Auditing Staging & Architectural Lighting...</div>
         </div>
       `;
 
@@ -407,9 +405,9 @@ export async function renderListingOptimizer(container: HTMLElement, showToast: 
         renderPhotoAssessment(assessmentContainer, assessment);
       } catch (err) {
         assessmentContainer.innerHTML = `
-          <div class="glass-card" style="text-align: center; padding: 2rem;">
-            <div style="color: #e11d48; font-weight: 700;">Audit Error</div>
-            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem;">${(err as Error).message}</p>
+          <div class="glass-card" style="text-align: center; padding: 2.5rem;">
+            <div style="color: var(--accent-rose); font-weight: 700;">Audit Error</div>
+            <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 0.5rem;">${(err as Error).message}</p>
           </div>
         `;
       }
@@ -420,40 +418,40 @@ export async function renderListingOptimizer(container: HTMLElement, showToast: 
         <div class="glass-card" style="margin-bottom: 1.5rem;">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
             <div>
-              <span style="font-size: 0.75rem; font-weight: 800; color: #059669; text-transform: uppercase; letter-spacing: 1px;">Quality Rating</span>
-              <h3 style="font-family: var(--font-heading); font-size: 1.4rem; font-weight: 800; color: #0f172a;">Overall Score: ${a.score}/10</h3>
+              <span style="font-size: 0.75rem; font-weight: 800; color: var(--accent-emerald); text-transform: uppercase; letter-spacing: 1px;">Quality Rating</span>
+              <h3 style="font-family: var(--font-heading); font-size: 1.4rem; font-weight: 800; color: var(--text-primary);">Overall Score: ${a.score}/10</h3>
             </div>
-            <div style="font-size: 2.2rem; font-weight: 800; color: #059669; font-family: var(--font-mono);">${a.score >= 8.5 ? '🏆 A+' : a.score >= 7.5 ? '⭐ A' : '👍 B'}</div>
+            <div style="font-size: 2.2rem; font-weight: 800; color: var(--accent-emerald); font-family: var(--font-mono);">${a.score >= 8.5 ? '🏆 A+' : a.score >= 7.5 ? '⭐ A' : '👍 B'}</div>
           </div>
 
           <div style="display: flex; flex-direction: column; gap: 0.85rem; margin-top: 1.25rem;">
             <div>
               <div style="display: flex; justify-content: space-between; font-size: 0.82rem; font-weight: 700; margin-bottom: 0.35rem;">
                 <span style="color: var(--text-primary);">Natural & Ambient Lighting</span>
-                <span style="color: #0284c7; font-family: var(--font-mono);">${a.lighting}/10</span>
+                <span style="color: var(--accent-ocean); font-family: var(--font-mono);">${a.lighting}/10</span>
               </div>
               <div class="bar-track">
-                <div class="bar-fill" style="width: ${(a.lighting / 10) * 100}%; background: #0284c7;"></div>
+                <div class="bar-fill" style="width: ${(a.lighting / 10) * 100}%; background: var(--accent-ocean);"></div>
               </div>
             </div>
 
             <div>
               <div style="display: flex; justify-content: space-between; font-size: 0.82rem; font-weight: 700; margin-bottom: 0.35rem;">
                 <span style="color: var(--text-primary);">Architectural Composition & Depth</span>
-                <span style="color: #7c3aed; font-family: var(--font-mono);">${a.composition}/10</span>
+                <span style="color: var(--accent-purple); font-family: var(--font-mono);">${a.composition}/10</span>
               </div>
               <div class="bar-track">
-                <div class="bar-fill" style="width: ${(a.composition / 10) * 100}%; background: #7c3aed;"></div>
+                <div class="bar-fill" style="width: ${(a.composition / 10) * 100}%; background: var(--accent-purple);"></div>
               </div>
             </div>
 
             <div>
               <div style="display: flex; justify-content: space-between; font-size: 0.82rem; font-weight: 700; margin-bottom: 0.35rem;">
                 <span style="color: var(--text-primary);">Decluttering & Clean Staging</span>
-                <span style="color: #059669; font-family: var(--font-mono);">${a.cleanliness}/10</span>
+                <span style="color: var(--accent-emerald); font-family: var(--font-mono);">${a.cleanliness}/10</span>
               </div>
               <div class="bar-track">
-                <div class="bar-fill" style="width: ${(a.cleanliness / 10) * 100}%; background: #059669;"></div>
+                <div class="bar-fill" style="width: ${(a.cleanliness / 10) * 100}%; background: var(--accent-emerald);"></div>
               </div>
             </div>
           </div>
@@ -463,14 +461,14 @@ export async function renderListingOptimizer(container: HTMLElement, showToast: 
           <div class="ai-advice-box" style="margin-bottom: 1.25rem;">
             <div class="ai-sparkle-icon">📸</div>
             <div class="ai-advice-text">
-              <strong>Visual Expert Feedback:</strong> ${a.feedback}
+              <strong style="color: var(--accent-gold);">Visual Expert Feedback:</strong> ${a.feedback}
             </div>
           </div>
 
-          <h4 style="font-family: var(--font-heading); font-size: 1.05rem; font-weight: 800; color: #0f172a; margin-bottom: 0.75rem;">
+          <h4 style="font-family: var(--font-heading); font-size: 1.05rem; font-weight: 800; color: var(--text-primary); margin-bottom: 0.75rem;">
             💡 High-Conversion Staging Tips
           </h4>
-          <ul style="padding-left: 1.2rem; font-size: 0.88rem; color: var(--text-primary); display: flex; flex-direction: column; gap: 0.5rem;">
+          <ul style="padding-left: 1.2rem; font-size: 0.88rem; color: var(--text-secondary); display: flex; flex-direction: column; gap: 0.5rem;">
             ${a.tips.map(tip => `<li>${tip}</li>`).join('')}
           </ul>
         </div>
@@ -483,7 +481,7 @@ export async function renderListingOptimizer(container: HTMLElement, showToast: 
   } catch (error) {
     container.innerHTML = `
       <div class="glass-card" style="text-align: center; padding: 3rem;">
-        <div style="color: #e11d48;">Could not load listing optimizer: ${(error as Error).message}</div>
+        <div style="color: var(--accent-rose); font-weight: 700;">Could not load listing optimizer: ${(error as Error).message}</div>
       </div>
     `;
   }

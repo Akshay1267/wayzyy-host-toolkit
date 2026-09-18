@@ -9,6 +9,8 @@ const bookingsRouter = require('./routes/bookings');
 const pricingRouter = require('./routes/pricing');
 const listingRouter = require('./routes/listing');
 const botRouter = require('./routes/bot');
+const whatsappRouter = require('./routes/whatsapp');
+const { isConfigured: isWhatsAppConfigured, verifyToken: verifyWhatsApp } = require('./services/whatsappClient');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -38,6 +40,7 @@ app.get('/api/health', async (req, res) => {
 
   const hasGemini = Boolean(process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY.trim() !== '');
   const hasClaude = Boolean(process.env.ANTHROPIC_API_KEY && process.env.ANTHROPIC_API_KEY.trim() !== '');
+  const whatsappConfigured = isWhatsAppConfigured();
 
   res.json({
     status: 'ok',
@@ -47,7 +50,8 @@ app.get('/api/health', async (req, res) => {
     llmWorking: llmStatus.working,
     llmProvider: llmStatus.provider, // 'gemini' | 'claude' | 'fallback'
     llmModel: llmStatus.model || null,
-    llmError: llmStatus.error
+    llmError: llmStatus.error,
+    whatsappConfigured
   });
 });
 
@@ -57,6 +61,7 @@ app.use('/api/bookings', bookingsRouter);
 app.use('/api/pricing', pricingRouter);
 app.use('/api/listing', listingRouter);
 app.use('/api/bot', botRouter);
+app.use('/api/whatsapp', whatsappRouter);
 
 // Global Error Handler
 app.use((err, req, res, next) => {
@@ -80,4 +85,17 @@ app.listen(PORT, () => {
       console.log('ℹ️ Running in Smart Fallback AI mode (No Anthropic API key configured)');
     }
   });
+
+  // Verify WhatsApp Cloud API connection on startup
+  if (isWhatsAppConfigured()) {
+    verifyWhatsApp().then(waStatus => {
+      if (waStatus.working) {
+        console.log(`📱 WhatsApp Cloud API connected — ${waStatus.name || 'Business'} (${waStatus.phoneNumber || 'unknown'})`);
+      } else {
+        console.log(`⚠️ WhatsApp token provided but verification failed: ${waStatus.error}`);
+      }
+    });
+  } else {
+    console.log('ℹ️ WhatsApp Cloud API not configured (set WHATSAPP_ACCESS_TOKEN & WHATSAPP_PHONE_NUMBER_ID in .env)');
+  }
 });

@@ -126,4 +126,5 @@ export interface HealthResponse {
   llmProvider?: 'gemini' | 'claude' | 'fallback';
   llmModel?: string | null;
   llmError?: string | null;
+  whatsappConfigured?: boolean;
 }

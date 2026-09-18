@@ -3,8 +3,8 @@ import type { Booking } from '../types';
 
 export async function renderDashboard(container: HTMLElement, onNavigate: (tab: string) => void) {
   container.innerHTML = `
-    <div style="display: flex; justify-content: center; padding: 3rem;">
-      <div class="status-dot" style="width: 16px; height: 16px;"></div>
+    <div style="display: flex; justify-content: center; padding: 4rem;">
+      <div class="status-dot" style="width: 18px; height: 18px;"></div>
     </div>
   `;
 
@@ -22,7 +22,7 @@ export async function renderDashboard(container: HTMLElement, onNavigate: (tab: 
           <h1 class="section-title">Host Performance & Intelligence</h1>
           <p class="section-desc">Real-time revenue metrics, occupancy analytics, and market pacing across your vacation rental portfolio.</p>
         </div>
-        <div style="display: flex; gap: 0.75rem;">
+        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
           <button id="btn-quick-price" class="btn btn-primary btn-sm">
             <span>⚡ Calculate Dynamic Price</span>
           </button>
@@ -34,7 +34,7 @@ export async function renderDashboard(container: HTMLElement, onNavigate: (tab: 
 
       <!-- KPI Grid -->
       <div class="kpi-grid">
-        <div class="kpi-card" style="--card-accent: #059669;">
+        <div class="kpi-card" style="--card-accent: var(--accent-emerald);">
           <div class="kpi-header">
             <span class="kpi-label">Total Revenue</span>
             <div class="kpi-icon-wrap">💰</div>
@@ -45,36 +45,36 @@ export async function renderDashboard(container: HTMLElement, onNavigate: (tab: 
           </div>
         </div>
 
-        <div class="kpi-card" style="--card-accent: #0284c7;">
+        <div class="kpi-card" style="--card-accent: var(--accent-ocean);">
           <div class="kpi-header">
             <span class="kpi-label">Estimated Occupancy</span>
             <div class="kpi-icon-wrap">📊</div>
           </div>
           <div class="kpi-value">${stats.occupancyRate}%</div>
           <div class="kpi-subtext">
-            <span style="color: #0284c7;">● 3.8 nights avg stay</span>
+            <span style="color: var(--accent-ocean);">● 3.8 nights avg stay</span>
           </div>
         </div>
 
-        <div class="kpi-card" style="--card-accent: #d97706;">
+        <div class="kpi-card" style="--card-accent: var(--accent-gold);">
           <div class="kpi-header">
             <span class="kpi-label">Total Bookings</span>
             <div class="kpi-icon-wrap">📅</div>
           </div>
           <div class="kpi-value">${stats.totalBookings}</div>
           <div class="kpi-subtext">
-            <span style="color: #d97706;">● 5 direct WhatsApp leads</span>
+            <span style="color: var(--accent-gold);">● 5 direct WhatsApp leads</span>
           </div>
         </div>
 
-        <div class="kpi-card" style="--card-accent: #7c3aed;">
+        <div class="kpi-card" style="--card-accent: var(--accent-purple);">
           <div class="kpi-header">
             <span class="kpi-label">Avg. Daily Rate (ADR)</span>
             <div class="kpi-icon-wrap">🏷️</div>
           </div>
           <div class="kpi-value">₹${stats.avgNightlyRate.toLocaleString('en-IN')}</div>
           <div class="kpi-subtext">
-            <span style="color: #7c3aed;">● Strongest in Villas & Chalets</span>
+            <span style="color: var(--accent-purple);">● Strongest in Villas & Chalets</span>
           </div>
         </div>
       </div>
@@ -83,15 +83,15 @@ export async function renderDashboard(container: HTMLElement, onNavigate: (tab: 
       <div class="dashboard-grid">
         <!-- Left: Revenue by Property -->
         <div class="glass-card">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
             <div>
-              <h3 style="font-family: var(--font-heading); font-size: 1.25rem; font-weight: 800; color: #0f172a;">Revenue by Listing</h3>
+              <h3 style="font-family: var(--font-heading); font-size: 1.25rem; font-weight: 800; color: var(--text-primary);">Revenue by Listing</h3>
               <p style="font-size: 0.85rem; color: var(--text-muted);">Cumulative revenue across your active listings</p>
             </div>
             <button id="btn-view-all-props" class="btn btn-secondary btn-sm">Manage Properties →</button>
           </div>
 
-          <div style="margin-top: 1.75rem;">
+          <div style="margin-top: 1rem;">
             ${stats.propertyBreakdown.map(prop => {
               const pct = Math.round((prop.revenue / maxRevenue) * 100);
               return `
@@ -112,7 +112,7 @@ export async function renderDashboard(container: HTMLElement, onNavigate: (tab: 
           <div class="ai-advice-box">
             <div class="ai-sparkle-icon">✨</div>
             <div class="ai-advice-text">
-              <strong>Market Intelligence:</strong> Holiday & festival season demand is trending up by +30% for upcoming long weekends across vacation destinations. Consider enabling a 2-night minimum stay rule for peak dates.
+              <strong style="color: var(--accent-gold);">Market Intelligence:</strong> Holiday & festival season demand is trending up by +30% for upcoming long weekends across vacation destinations. Consider enabling a 2-night minimum stay rule for peak dates.
             </div>
           </div>
         </div>
@@ -120,39 +120,39 @@ export async function renderDashboard(container: HTMLElement, onNavigate: (tab: 
         <!-- Right: Booking Channel Split & Fast Actions -->
         <div class="glass-card" style="display: flex; flex-direction: column; gap: 1.5rem;">
           <div>
-            <h3 style="font-family: var(--font-heading); font-size: 1.25rem; font-weight: 800; color: #0f172a;">Direct vs Platform Share</h3>
+            <h3 style="font-family: var(--font-heading); font-size: 1.25rem; font-weight: 800; color: var(--text-primary);">Direct vs Platform Share</h3>
             <p style="font-size: 0.85rem; color: var(--text-muted);">Save 15-20% commission on direct WhatsApp bookings</p>
           </div>
 
           <div style="display: flex; flex-direction: column; gap: 0.85rem;">
-            <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.9rem 1.1rem; background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: var(--radius-md);">
-              <div style="display: flex; align-items: center; gap: 0.6rem;">
-                <span style="font-size: 1.3rem;">💬</span>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.95rem 1.2rem; background: var(--accent-emerald-soft); border: 1px solid var(--accent-emerald-border); border-radius: var(--radius-md);">
+              <div style="display: flex; align-items: center; gap: 0.75rem;">
+                <span style="font-size: 1.4rem;">💬</span>
                 <div>
-                  <div style="font-weight: 700; font-size: 0.92rem; color: #047857;">WhatsApp Direct</div>
-                  <div style="font-size: 0.75rem; color: #065f46;">Zero platform fees</div>
+                  <div style="font-weight: 700; font-size: 0.92rem; color: var(--accent-emerald-text);">WhatsApp Direct</div>
+                  <div style="font-size: 0.76rem; color: var(--accent-emerald);">Zero platform fees</div>
                 </div>
               </div>
-              <div style="font-weight: 800; color: #047857; font-family: var(--font-mono); font-size: 1.05rem;">45% Share</div>
+              <div style="font-weight: 800; color: var(--accent-emerald-text); font-family: var(--font-mono); font-size: 1.1rem;">45% Share</div>
             </div>
 
-            <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.9rem 1.1rem; background: #f8f6f0; border: 1px solid var(--border-subtle); border-radius: var(--radius-md);">
-              <div style="display: flex; align-items: center; gap: 0.6rem;">
-                <span style="font-size: 1.3rem;">🌐</span>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.95rem 1.2rem; background: var(--bg-surface-soft); border: 1px solid var(--border-subtle); border-radius: var(--radius-md);">
+              <div style="display: flex; align-items: center; gap: 0.75rem;">
+                <span style="font-size: 1.4rem;">🌐</span>
                 <div>
                   <div style="font-weight: 700; font-size: 0.92rem; color: var(--text-primary);">OTA Channels</div>
-                  <div style="font-size: 0.75rem; color: var(--text-muted);">Airbnb, Booking.com</div>
+                  <div style="font-size: 0.76rem; color: var(--text-muted);">Airbnb, Booking.com</div>
                 </div>
               </div>
-              <div style="font-weight: 800; color: var(--text-secondary); font-family: var(--font-mono); font-size: 1.05rem;">55% Share</div>
+              <div style="font-weight: 800; color: var(--text-secondary); font-family: var(--font-mono); font-size: 1.1rem;">55% Share</div>
             </div>
           </div>
 
           <div style="margin-top: auto; padding-top: 1.25rem; border-top: 1px solid var(--border-subtle);">
-            <div style="font-size: 0.85rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 0.75rem;">Toolkit Shortcuts</div>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem;">
-              <button id="btn-dash-listing" class="btn btn-secondary btn-sm" style="font-size: 0.8rem;">✍️ AI Listing Copy</button>
-              <button id="btn-dash-bookings" class="btn btn-secondary btn-sm" style="font-size: 0.8rem;">📋 Bookings Table</button>
+            <div style="font-size: 0.84rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px;">Toolkit Shortcuts</div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.65rem;">
+              <button id="btn-dash-listing" class="btn btn-secondary btn-sm" style="font-size: 0.82rem;">✍️ AI Listing Copy</button>
+              <button id="btn-dash-bookings" class="btn btn-secondary btn-sm" style="font-size: 0.82rem;">📋 Bookings Table</button>
             </div>
           </div>
         </div>
@@ -160,9 +160,9 @@ export async function renderDashboard(container: HTMLElement, onNavigate: (tab: 
 
       <!-- Recent Reservations Feed -->
       <div class="glass-card">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.35rem;">
           <div>
-            <h3 style="font-family: var(--font-heading); font-size: 1.25rem; font-weight: 800; color: #0f172a;">Recent Guest Reservations</h3>
+            <h3 style="font-family: var(--font-heading); font-size: 1.25rem; font-weight: 800; color: var(--text-primary);">Recent Guest Reservations</h3>
             <p style="font-size: 0.85rem; color: var(--text-muted);">Latest check-ins across your properties</p>
           </div>
           <button id="btn-view-bookings-table" class="btn btn-secondary btn-sm">Full Schedule →</button>
@@ -185,18 +185,18 @@ export async function renderDashboard(container: HTMLElement, onNavigate: (tab: 
               ${bookings.slice(0, 5).map((b: Booking) => `
                 <tr>
                   <td>
-                    <div style="font-weight: 700;">${b.guest_name}</div>
+                    <div style="font-weight: 700; color: var(--text-primary);">${b.guest_name}</div>
                     <div style="font-size: 0.78rem; color: var(--text-muted);">${b.guest_phone || 'Direct Lead'}</div>
                   </td>
                   <td>
-                    <div style="font-weight: 700; color: #0284c7;">${b.property_name || 'Listing #' + b.property_id}</div>
+                    <div style="font-weight: 700; color: var(--accent-ocean);">${b.property_name || 'Listing #' + b.property_id}</div>
                     <div style="font-size: 0.78rem; color: var(--text-muted);">${b.location || 'Goa'}</div>
                   </td>
                   <td>
-                    <div style="font-family: var(--font-mono); font-size: 0.85rem; font-weight: 600;">${b.check_in} → ${b.check_out}</div>
+                    <div style="font-family: var(--font-mono); font-size: 0.85rem; font-weight: 600; color: var(--text-secondary);">${b.check_in} → ${b.check_out}</div>
                   </td>
-                  <td style="font-weight: 600;">${b.guests} guests</td>
-                  <td style="font-family: var(--font-mono); font-weight: 800; color: #059669; font-size: 0.95rem;">₹${b.total_amount.toLocaleString('en-IN')}</td>
+                  <td style="font-weight: 600; color: var(--text-secondary);">${b.guests} guests</td>
+                  <td style="font-family: var(--font-mono); font-weight: 800; color: var(--accent-emerald); font-size: 0.98rem;">₹${b.total_amount.toLocaleString('en-IN')}</td>
                   <td>
                     <span class="badge-status badge-${b.status}">${b.status}</span>
                   </td>
@@ -224,9 +224,9 @@ export async function renderDashboard(container: HTMLElement, onNavigate: (tab: 
   } catch (error) {
     container.innerHTML = `
       <div class="glass-card" style="text-align: center; padding: 3rem;">
-        <div style="font-size: 2rem; margin-bottom: 1rem;">⚠️</div>
-        <div style="font-size: 1.1rem; font-weight: 600; color: #e11d48;">Could not load dashboard data</div>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem;">${(error as Error).message}</p>
+        <div style="font-size: 2.2rem; margin-bottom: 1rem;">⚠️</div>
+        <div style="font-size: 1.15rem; font-weight: 700; color: var(--accent-rose);">Could not load dashboard data</div>
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 0.5rem;">${(error as Error).message}</p>
         <button class="btn btn-primary" style="margin-top: 1.5rem;" onclick="location.reload()">Retry</button>
       </div>
     `;

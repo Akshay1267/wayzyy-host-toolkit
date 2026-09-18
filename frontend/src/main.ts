@@ -6,6 +6,45 @@ import { renderListingOptimizer } from './components/ListingOptimizer';
 import { renderBotSimulator } from './components/BotSimulator';
 import { renderPropertyManager } from './components/PropertyManager';
 
+// Theme Management System
+function initTheme() {
+  const savedTheme = localStorage.getItem('wayzyy_theme');
+  const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const initialTheme = savedTheme || (systemPrefersDark ? 'dark' : 'light');
+  
+  applyTheme(initialTheme);
+
+  // Listen to system theme changes if no explicit user preference is stored
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+    if (!localStorage.getItem('wayzyy_theme')) {
+      applyTheme(e.matches ? 'dark' : 'light');
+    }
+  });
+}
+
+function applyTheme(theme: string) {
+  document.documentElement.setAttribute('data-theme', theme);
+  const iconEl = document.getElementById('theme-icon-slot');
+  const labelEl = document.getElementById('theme-label-text');
+  
+  if (iconEl && labelEl) {
+    if (theme === 'dark') {
+      iconEl.textContent = '🌙';
+      labelEl.textContent = 'Obsidian Dark';
+    } else {
+      iconEl.textContent = '☀️';
+      labelEl.textContent = 'Warm White';
+    }
+  }
+}
+
+function toggleTheme() {
+  const current = document.documentElement.getAttribute('data-theme') || 'light';
+  const next = current === 'dark' ? 'light' : 'dark';
+  localStorage.setItem('wayzyy_theme', next);
+  applyTheme(next);
+}
+
 // Global Toast Manager
 function showToast(message: string, type: 'success' | 'error' = 'success') {
   const container = document.getElementById('toast-container');
@@ -37,22 +76,33 @@ function initApp() {
       <div class="brand-section">
         <div class="brand-logo-badge">🏡</div>
         <div>
-          <div class="brand-title">Wayzyy <span style="font-size: 0.85rem; font-weight: 500; color: #0284c7; padding: 0.15rem 0.5rem; background: rgba(2, 132, 199, 0.1); border-radius: 9999px; border: 1px solid rgba(2, 132, 199, 0.25);">Host OS</span></div>
-          <div class="brand-subtitle">Short-Term Rental AI & Revenue Growth Toolkit</div>
+          <div class="brand-title">
+            <span>Wayzyy</span>
+            <span class="brand-badge-pill">Host OS</span>
+          </div>
+          <div class="brand-subtitle">Short-Term Rental AI & Revenue Growth Platform</div>
         </div>
       </div>
 
       <div class="header-right">
+        <!-- Theme Mode Toggle Button -->
+        <button id="theme-toggle-btn" class="theme-toggle-btn" title="Toggle Warm White / Obsidian Dark Theme" aria-label="Toggle Theme">
+          <span class="theme-icon-slot" id="theme-icon-slot">☀️</span>
+          <span id="theme-label-text">Warm White</span>
+        </button>
+
+        <!-- API Status Pill -->
         <div id="backend-status-pill" class="status-pill">
           <div class="status-dot"></div>
           <span>API Connected</span>
         </div>
 
+        <!-- Host Profile -->
         <div class="host-profile">
           <div class="host-avatar">RN</div>
           <div>
             <div class="host-info-name">Rajesh Naik</div>
-            <div class="host-info-role">Superhost • 4 Properties</div>
+            <div class="host-info-role">★ Superhost • 4 Stays</div>
           </div>
         </div>
       </div>
@@ -76,7 +126,7 @@ function initApp() {
       <button class="nav-tab" data-tab="bot">
         <span>💬</span>
         <span>WhatsApp Concierge</span>
-        <span class="nav-badge" style="background: rgba(16, 185, 129, 0.2); color: #34d399;">24/7 Live</span>
+        <span class="nav-badge" style="background: var(--accent-emerald-soft); color: var(--accent-emerald); border-color: var(--accent-emerald-border);">24/7 Live</span>
       </button>
       <button class="nav-tab" data-tab="properties">
         <span>🏡</span>
@@ -92,6 +142,14 @@ function initApp() {
     <!-- Global Toast Container -->
     <div id="toast-container" class="toast-container"></div>
   `;
+
+  // Initialize theme button state
+  const savedTheme = localStorage.getItem('wayzyy_theme');
+  const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  applyTheme(savedTheme || (systemPrefersDark ? 'dark' : 'light'));
+
+  const themeBtn = document.getElementById('theme-toggle-btn');
+  themeBtn?.addEventListener('click', toggleTheme);
 
   const contentArea = document.getElementById('main-content') as HTMLElement;
   const navTabs = document.querySelectorAll<HTMLButtonElement>('.nav-tab');
@@ -141,30 +199,31 @@ function initApp() {
     try {
       const health = await api.checkHealth();
       if (health.status === 'ok') {
+        const waLabel = health.whatsappConfigured ? ' • 💬 WA Live' : '';
         if (health.llmWorking) {
           const providerLabel = health.llmProvider === 'gemini' ? 'Gemini AI' : health.llmProvider === 'claude' ? 'Claude AI' : 'Live AI';
           statusPill.innerHTML = `
-            <div class="status-dot" style="background: #059669; box-shadow: 0 0 6px rgba(5, 150, 105, 0.4);"></div>
-            <span style="font-weight: 700; color: #065f46;">API Connected (${providerLabel})</span>
+            <div class="status-dot" style="background: var(--accent-emerald);"></div>
+            <span style="font-weight: 700; color: var(--accent-emerald-text);">API Connected (${providerLabel})${waLabel}</span>
           `;
-          statusPill.style.borderColor = '#a7f3d0';
-          statusPill.style.background = '#ecfdf5';
-          statusPill.title = `Live ${health.llmModel || providerLabel} active & responding!`;
+          statusPill.style.borderColor = 'var(--accent-emerald-border)';
+          statusPill.style.background = 'var(--accent-emerald-soft)';
+          statusPill.title = `Live ${health.llmModel || providerLabel} active & responding!${health.whatsappConfigured ? ' WhatsApp Cloud API connected.' : ''}`;
         } else if (health.llmConfigured) {
           statusPill.innerHTML = `
-            <div class="status-dot" style="background: #d97706; box-shadow: 0 0 6px rgba(217, 119, 6, 0.4);"></div>
-            <span style="font-weight: 700; color: #92400e;">API Connected (Smart Fallback)</span>
+            <div class="status-dot" style="background: var(--accent-gold);"></div>
+            <span style="font-weight: 700; color: var(--accent-gold);">API Connected (Smart Fallback)${waLabel}</span>
           `;
-          statusPill.style.borderColor = '#fde68a';
-          statusPill.style.background = '#fef3c7';
+          statusPill.style.borderColor = 'var(--accent-gold-border)';
+          statusPill.style.background = 'var(--accent-gold-soft)';
           statusPill.title = health.llmError ? `AI key notice: ${health.llmError} (Fallback engine active)` : 'Fallback engine active';
         } else {
           statusPill.innerHTML = `
-            <div class="status-dot" style="background: #0284c7; box-shadow: 0 0 6px rgba(2, 132, 199, 0.4);"></div>
-            <span style="font-weight: 700; color: #075985;">API Connected (Smart Fallback)</span>
+            <div class="status-dot" style="background: var(--accent-ocean);"></div>
+            <span style="font-weight: 700; color: var(--accent-ocean-text);">API Connected (Smart Fallback)${waLabel}</span>
           `;
-          statusPill.style.borderColor = '#bae6fd';
-          statusPill.style.background = '#f0f9ff';
+          statusPill.style.borderColor = 'var(--accent-ocean-border)';
+          statusPill.style.background = 'var(--accent-ocean-soft)';
           statusPill.title = 'Built-in vacation rental domain knowledge engine active';
         }
       } else {
@@ -172,11 +231,11 @@ function initApp() {
       }
     } catch {
       statusPill.innerHTML = `
-        <div class="status-dot" style="background: #e11d48; box-shadow: 0 0 8px rgba(225, 29, 72, 0.4);"></div>
-        <span style="color: #9f1239; font-weight: 700;">Backend Offline</span>
+        <div class="status-dot" style="background: var(--accent-rose);"></div>
+        <span style="color: var(--accent-rose-text); font-weight: 700;">Backend Offline</span>
       `;
-      statusPill.style.borderColor = '#fecdd3';
-      statusPill.style.background = '#fff1f2';
+      statusPill.style.borderColor = 'var(--accent-rose-border)';
+      statusPill.style.background = 'var(--accent-rose-soft)';
       statusPill.title = 'Unable to reach backend server on http://localhost:5000';
     }
   }
@@ -188,4 +247,6 @@ function initApp() {
   navigateTo('dashboard');
 }
 
+// Kick off
+initTheme();
 initApp();

@@ -3,8 +3,8 @@ import type { PricingResult } from '../types';
 
 export async function renderPricingEngine(container: HTMLElement, showToast: (msg: string, type?: 'success' | 'error') => void) {
   container.innerHTML = `
-    <div style="display: flex; justify-content: center; padding: 3rem;">
-      <div class="status-dot" style="width: 16px; height: 16px;"></div>
+    <div style="display: flex; justify-content: center; padding: 4rem;">
+      <div class="status-dot" style="width: 18px; height: 18px;"></div>
     </div>
   `;
 
@@ -23,7 +23,7 @@ export async function renderPricingEngine(container: HTMLElement, showToast: (ms
         <!-- Left: Form Controls -->
         <div class="glass-card">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-            <h3 style="font-family: var(--font-heading); font-size: 1.25rem; font-weight: 800; color: #0f172a;">Pricing Parameters</h3>
+            <h3 style="font-family: var(--font-heading); font-size: 1.25rem; font-weight: 800; color: var(--text-primary);">Pricing Parameters</h3>
             <select id="preset-property-select" class="form-select" style="width: auto; padding: 0.4rem 0.85rem; font-size: 0.82rem; font-weight: 600;">
               <option value="">⚡ Load from Listing...</option>
               ${properties.map(p => `<option value="${p.id}">${p.name} (${p.location})</option>`).join('')}
@@ -146,7 +146,7 @@ export async function renderPricingEngine(container: HTMLElement, showToast: (ms
         <div id="pricing-results-container">
           <div class="glass-card" style="text-align: center; padding: 3.5rem;">
             <div style="font-size: 2.8rem; margin-bottom: 1rem;">🏡</div>
-            <div style="font-size: 1.2rem; font-weight: 700; color: #0f172a;">Ready to optimize pricing</div>
+            <div style="font-size: 1.2rem; font-weight: 700; color: var(--text-primary);">Ready to optimize pricing</div>
             <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0.5rem;">Select your parameters or pick an existing listing and click "Calculate Optimal Rate".</p>
           </div>
         </div>
@@ -205,8 +205,8 @@ export async function renderPricingEngine(container: HTMLElement, showToast: (ms
       const resultsContainer = container.querySelector('#pricing-results-container') as HTMLElement;
       resultsContainer.innerHTML = `
         <div class="glass-card" style="text-align: center; padding: 3.5rem;">
-          <div class="status-dot" style="margin: 0 auto 1rem; width: 16px; height: 16px;"></div>
-          <div style="font-weight: 700; font-size: 1.05rem; color: #0f172a;">Analyzing Market Trends & Destination Factors with AI...</div>
+          <div class="status-dot" style="margin: 0 auto 1rem; width: 18px; height: 18px;"></div>
+          <div style="font-weight: 700; font-size: 1.05rem; color: var(--text-primary);">Analyzing Market Trends & Destination Factors with AI...</div>
         </div>
       `;
 
@@ -241,9 +241,9 @@ export async function renderPricingEngine(container: HTMLElement, showToast: (ms
         });
       } catch (err) {
         resultsContainer.innerHTML = `
-          <div class="glass-card" style="text-align: center; padding: 2rem;">
-            <div style="color: #e11d48; font-weight: 700;">Calculation Error</div>
-            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem;">${(err as Error).message}</p>
+          <div class="glass-card" style="text-align: center; padding: 2.5rem;">
+            <div style="color: var(--accent-rose); font-weight: 700;">Calculation Error</div>
+            <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 0.5rem;">${(err as Error).message}</p>
           </div>
         `;
       }
@@ -253,27 +253,27 @@ export async function renderPricingEngine(container: HTMLElement, showToast: (ms
       target.innerHTML = `
         <!-- Hero Price Box -->
         <div class="pricing-result-hero">
-          <div style="font-size: 0.88rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #0284c7; margin-bottom: 0.35rem;">
+          <div style="font-size: 0.88rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--accent-ocean); margin-bottom: 0.35rem;">
             Recommended Nightly Rate
           </div>
           <div class="rate-badge-lg">₹${result.mid.toLocaleString('en-IN')}</div>
           <div class="rate-range-pill">
-            <span style="color: var(--text-muted); font-weight: 500;">Floor: <strong style="color: #0f172a;">₹${result.low.toLocaleString('en-IN')}</strong></span>
-            <span style="color: #d6cebf;">|</span>
-            <span style="color: var(--text-muted); font-weight: 500;">Ceiling: <strong style="color: #0f172a;">₹${result.high.toLocaleString('en-IN')}</strong></span>
+            <span>Floor: <strong style="color: var(--text-primary);">₹${result.low.toLocaleString('en-IN')}</strong></span>
+            <span style="opacity: 0.4;">|</span>
+            <span>Ceiling: <strong style="color: var(--text-primary);">₹${result.high.toLocaleString('en-IN')}</strong></span>
           </div>
         </div>
 
         <!-- Factor Breakdown -->
         <div class="glass-card" style="margin-bottom: 1.5rem;">
-          <h4 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 800; color: #0f172a; margin-bottom: 1rem;">
+          <h4 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 800; color: var(--text-primary); margin-bottom: 1rem;">
             Pricing Adjustment Breakdown
           </h4>
           <div style="display: flex; flex-direction: column; gap: 0.75rem;">
             ${result.factors.map(f => {
               const badgeClass = f.direction === 'up' ? 'factor-up' : f.direction === 'down' ? 'factor-down' : f.direction === 'base' ? 'factor-base' : 'factor-neutral';
               return `
-                <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.65rem 0.95rem; background: #faf8f5; border: 1px solid #f1ede4; border-radius: var(--radius-sm);">
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.65rem 0.95rem; background: var(--bg-surface-soft); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);">
                   <span style="font-size: 0.92rem; font-weight: 600; color: var(--text-primary);">${f.factor}</span>
                   <span class="factor-impact-badge ${badgeClass}">${f.impact}</span>
                 </div>
@@ -285,11 +285,11 @@ export async function renderPricingEngine(container: HTMLElement, showToast: (ms
           <div class="ai-advice-box">
             <div class="ai-sparkle-icon">💡</div>
             <div class="ai-advice-text">
-              <strong>Revenue Strategist Advisor:</strong> ${result.explanation}
+              <strong style="color: var(--accent-gold);">Revenue Strategist Advisor:</strong> ${result.explanation}
             </div>
           </div>
 
-          <div style="display: flex; justify-content: flex-end; margin-top: 1.25rem;">
+          <div style="display: flex; justify-content: flex-end; margin-top: 1.35rem;">
             <button id="btn-save-pricing-log" class="btn btn-secondary btn-sm">
               <span>💾 Save Recommendation to History</span>
             </button>
@@ -298,7 +298,7 @@ export async function renderPricingEngine(container: HTMLElement, showToast: (ms
 
         <!-- Market Comparables -->
         <div class="glass-card">
-          <h4 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 800; color: #0f172a; margin-bottom: 1rem;">
+          <h4 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 800; color: var(--text-primary); margin-bottom: 1rem;">
             Destination Benchmark Comparables
           </h4>
           <div class="custom-table-container">
@@ -315,12 +315,12 @@ export async function renderPricingEngine(container: HTMLElement, showToast: (ms
               <tbody>
                 ${result.comparables.map(c => `
                   <tr>
-                    <td style="font-weight: 700;">${c.name}</td>
-                    <td style="font-weight: 500;">${c.location}</td>
-                    <td style="font-family: var(--font-mono); font-weight: 800; color: #0284c7;">₹${c.rate.toLocaleString('en-IN')}</td>
+                    <td style="font-weight: 700; color: var(--text-primary);">${c.name}</td>
+                    <td style="font-weight: 500; color: var(--text-secondary);">${c.location}</td>
+                    <td style="font-family: var(--font-mono); font-weight: 800; color: var(--accent-ocean);">₹${c.rate.toLocaleString('en-IN')}</td>
                     <td style="font-weight: 600;">⭐ ${c.rating}</td>
                     <td>
-                      <span style="font-weight: 700; color: ${c.occupancy >= 0.75 ? '#047857' : '#b45309'};">
+                      <span style="font-weight: 700; color: ${c.occupancy >= 0.75 ? 'var(--accent-emerald)' : 'var(--accent-gold)'};">
                         ${Math.round(c.occupancy * 100)}%
                       </span>
                     </td>
@@ -357,7 +357,7 @@ export async function renderPricingEngine(container: HTMLElement, showToast: (ms
   } catch (error) {
     container.innerHTML = `
       <div class="glass-card" style="text-align: center; padding: 3rem;">
-        <div style="color: #e11d48;">Could not load pricing engine: ${(error as Error).message}</div>
+        <div style="color: var(--accent-rose); font-weight: 700;">Could not load pricing engine: ${(error as Error).message}</div>
       </div>
     `;
   }

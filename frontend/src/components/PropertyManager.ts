@@ -3,8 +3,8 @@ import type { Booking } from '../types';
 
 export async function renderPropertyManager(container: HTMLElement, showToast: (msg: string, type?: 'success' | 'error') => void) {
   container.innerHTML = `
-    <div style="display: flex; justify-content: center; padding: 3rem;">
-      <div class="status-dot" style="width: 16px; height: 16px;"></div>
+    <div style="display: flex; justify-content: center; padding: 4rem;">
+      <div class="status-dot" style="width: 18px; height: 18px;"></div>
     </div>
   `;
 
@@ -27,7 +27,7 @@ export async function renderPropertyManager(container: HTMLElement, showToast: (
             <h1 class="section-title">Properties & Reservations</h1>
             <p class="section-desc">Manage your vacation rental listings, create direct WhatsApp bookings, and oversee calendar reservations.</p>
           </div>
-          <div style="display: flex; gap: 0.75rem;">
+          <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
             <button id="btn-add-booking-modal" class="btn btn-emerald btn-sm">
               <span>➕ Add Direct Booking</span>
             </button>
@@ -39,7 +39,7 @@ export async function renderPropertyManager(container: HTMLElement, showToast: (
 
         <!-- Section 1: Property Cards Showcase -->
         <div style="margin-bottom: 2.5rem;">
-          <h3 style="font-family: var(--font-heading); font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem;">
+          <h3 style="font-family: var(--font-heading); font-size: 1.25rem; font-weight: 800; color: var(--text-primary); margin-bottom: 1.25rem;">
             Active Listings (${properties.length})
           </h3>
 
@@ -56,28 +56,28 @@ export async function renderPropertyManager(container: HTMLElement, showToast: (
                   <div class="property-body">
                     <div class="property-name">${p.name}</div>
                     <div class="property-loc">📍 ${p.location} • ${p.bedrooms} BHK (${p.max_guests} Guests)</div>
-                    <p style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.5; height: 3.6em; overflow: hidden; text-overflow: ellipsis; margin-bottom: 0.75rem;">
+                    <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; height: 3.2em; overflow: hidden; text-overflow: ellipsis; margin-bottom: 0.85rem;">
                       ${p.description || 'Charming vacation holiday stay.'}
                     </p>
 
                     <!-- Amenities tags -->
-                    <div style="display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 0.75rem;">
+                    <div style="display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.85rem;">
                       ${p.amenities.slice(0, 4).map(a => `
-                        <span style="font-size: 0.7rem; padding: 0.15rem 0.45rem; background: rgba(255, 255, 255, 0.05); border-radius: var(--radius-sm); color: var(--text-muted);">
+                        <span style="font-size: 0.72rem; padding: 0.2rem 0.55rem; background: var(--bg-surface-soft); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); color: var(--text-secondary); font-weight: 600;">
                           ${a}
                         </span>
                       `).join('')}
-                      ${p.amenities.length > 4 ? `<span style="font-size: 0.7rem; color: var(--text-muted);">+${p.amenities.length - 4} more</span>` : ''}
+                      ${p.amenities.length > 4 ? `<span style="font-size: 0.72rem; color: var(--text-muted); align-self: center;">+${p.amenities.length - 4} more</span>` : ''}
                     </div>
 
                     <div class="property-rate-box">
                       <div>
-                        <div style="font-size: 0.72rem; color: var(--text-muted);">Base Nightly Rate</div>
+                        <div style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Base Nightly Rate</div>
                         <div class="property-price">₹${p.base_rate.toLocaleString('en-IN')}</div>
                       </div>
                       <div style="text-align: right;">
-                        <div style="font-size: 0.72rem; color: var(--text-muted);">Total Revenue</div>
-                        <div style="font-family: var(--font-mono); font-weight: 700; color: #38bdf8;">₹${(p.total_revenue || 0).toLocaleString('en-IN')}</div>
+                        <div style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Total Revenue</div>
+                        <div style="font-family: var(--font-mono); font-weight: 800; color: var(--accent-ocean); font-size: 1.15rem;">₹${(p.total_revenue || 0).toLocaleString('en-IN')}</div>
                       </div>
                     </div>
                   </div>
@@ -89,14 +89,14 @@ export async function renderPropertyManager(container: HTMLElement, showToast: (
 
         <!-- Section 2: Bookings Management -->
         <div class="glass-card">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 1rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.35rem; flex-wrap: wrap; gap: 1rem;">
             <div>
-              <h3 style="font-family: var(--font-heading); font-size: 1.25rem; font-weight: 700;">Reservation Log & Status</h3>
-              <p style="font-size: 0.8rem; color: var(--text-muted);">Manage upcoming check-ins and direct payment confirmations</p>
+              <h3 style="font-family: var(--font-heading); font-size: 1.25rem; font-weight: 800; color: var(--text-primary);">Reservation Log & Status</h3>
+              <p style="font-size: 0.85rem; color: var(--text-muted);">Manage upcoming check-ins and direct payment confirmations</p>
             </div>
 
             <!-- Filter Pills -->
-            <div style="display: flex; gap: 0.4rem;">
+            <div style="display: flex; gap: 0.45rem;">
               <button class="btn btn-sm ${activeFilter === 'all' ? 'btn-primary' : 'btn-secondary'} filter-pill" data-filter="all">All</button>
               <button class="btn btn-sm ${activeFilter === 'confirmed' ? 'btn-primary' : 'btn-secondary'} filter-pill" data-filter="confirmed">Confirmed</button>
               <button class="btn btn-sm ${activeFilter === 'pending' ? 'btn-primary' : 'btn-secondary'} filter-pill" data-filter="pending">Pending</button>
@@ -123,24 +123,24 @@ export async function renderPropertyManager(container: HTMLElement, showToast: (
               <tbody>
                 ${filteredBookings.map((b: Booking) => `
                   <tr>
-                    <td style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-muted);">#${b.id}</td>
+                    <td style="font-family: var(--font-mono); font-size: 0.82rem; color: var(--text-muted);">#${b.id}</td>
                     <td>
-                      <div style="font-weight: 600;">${b.guest_name}</div>
+                      <div style="font-weight: 700; color: var(--text-primary);">${b.guest_name}</div>
                       <div style="font-size: 0.75rem; color: var(--text-muted);">${b.guest_phone || 'N/A'}</div>
                     </td>
                     <td>
-                      <div style="font-weight: 600; color: #38bdf8;">${b.property_name || 'Listing #' + b.property_id}</div>
+                      <div style="font-weight: 700; color: var(--accent-ocean);">${b.property_name || 'Listing #' + b.property_id}</div>
                       <div style="font-size: 0.75rem; color: var(--text-muted);">${b.location || 'Goa'}</div>
                     </td>
                     <td>
-                      <div style="font-family: var(--font-mono); font-size: 0.82rem;">${b.check_in}</div>
+                      <div style="font-family: var(--font-mono); font-size: 0.84rem; color: var(--text-primary); font-weight: 600;">${b.check_in}</div>
                       <div style="font-size: 0.72rem; color: var(--text-muted);">to ${b.check_out}</div>
                     </td>
-                    <td>${b.guests}</td>
-                    <td style="font-family: var(--font-mono); font-size: 0.82rem;">₹${b.nightly_rate.toLocaleString('en-IN')}</td>
-                    <td style="font-family: var(--font-mono); font-weight: 700; color: #10b981;">₹${b.total_amount.toLocaleString('en-IN')}</td>
+                    <td style="font-weight: 600; color: var(--text-secondary);">${b.guests}</td>
+                    <td style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-secondary);">₹${b.nightly_rate.toLocaleString('en-IN')}</td>
+                    <td style="font-family: var(--font-mono); font-weight: 800; color: var(--accent-emerald); font-size: 0.95rem;">₹${b.total_amount.toLocaleString('en-IN')}</td>
                     <td>
-                      <span style="font-size: 0.75rem; font-weight: 600;">
+                      <span style="font-size: 0.78rem; font-weight: 700; text-transform: uppercase; color: var(--text-secondary);">
                         ${b.source === 'whatsapp' ? '💬 WhatsApp' : b.source === 'direct' ? '⚡ Direct' : '🌐 OTA'}
                       </span>
                     </td>
@@ -150,12 +150,12 @@ export async function renderPropertyManager(container: HTMLElement, showToast: (
                     <td>
                       <div style="display: flex; gap: 0.35rem;">
                         ${b.status === 'pending' ? `
-                          <button class="btn btn-secondary btn-sm action-confirm-btn" data-id="${b.id}" style="font-size: 0.72rem; padding: 0.25rem 0.5rem; color: #34d399;">✓ Confirm</button>
+                          <button class="btn btn-secondary btn-sm action-confirm-btn" data-id="${b.id}" style="font-size: 0.75rem; padding: 0.3rem 0.55rem; color: var(--accent-emerald); font-weight: 700;">✓ Confirm</button>
                         ` : ''}
                         ${b.status === 'confirmed' ? `
-                          <button class="btn btn-secondary btn-sm action-complete-btn" data-id="${b.id}" style="font-size: 0.72rem; padding: 0.25rem 0.5rem; color: #38bdf8;">Done</button>
+                          <button class="btn btn-secondary btn-sm action-complete-btn" data-id="${b.id}" style="font-size: 0.75rem; padding: 0.3rem 0.55rem; color: var(--accent-ocean); font-weight: 700;">Done</button>
                         ` : ''}
-                        <button class="btn btn-secondary btn-sm action-delete-btn" data-id="${b.id}" style="font-size: 0.72rem; padding: 0.25rem 0.5rem; color: #fb7185;">✕</button>
+                        <button class="btn btn-secondary btn-sm action-delete-btn" data-id="${b.id}" style="font-size: 0.75rem; padding: 0.3rem 0.55rem; color: var(--accent-rose);" title="Cancel Booking">✕</button>
                       </div>
                     </td>
                   </tr>
@@ -165,7 +165,7 @@ export async function renderPropertyManager(container: HTMLElement, showToast: (
           </div>
         </div>
 
-        <!-- Modals Container -->
+        <!-- Modals placeholder -->
         <div id="modals-placeholder"></div>
       `;
 
@@ -181,38 +181,55 @@ export async function renderPropertyManager(container: HTMLElement, showToast: (
       container.querySelectorAll('.action-confirm-btn').forEach(btn => {
         btn.addEventListener('click', async () => {
           const id = Number((btn as HTMLElement).dataset.id);
-          await api.updateBookingStatus(id, 'confirmed');
-          showToast('Booking confirmed!', 'success');
-          renderPropertyManager(container, showToast);
+          try {
+            await api.updateBookingStatus(id, 'confirmed');
+            showToast('Booking #' + id + ' confirmed!', 'success');
+            const updated = bookings.find(b => b.id === id);
+            if (updated) updated.status = 'confirmed';
+            renderView();
+          } catch (e) {
+            showToast('Failed to update: ' + (e as Error).message, 'error');
+          }
         });
       });
 
       container.querySelectorAll('.action-complete-btn').forEach(btn => {
         btn.addEventListener('click', async () => {
           const id = Number((btn as HTMLElement).dataset.id);
-          await api.updateBookingStatus(id, 'completed');
-          showToast('Booking marked completed!', 'success');
-          renderPropertyManager(container, showToast);
+          try {
+            await api.updateBookingStatus(id, 'completed');
+            showToast('Booking #' + id + ' marked as completed!', 'success');
+            const updated = bookings.find(b => b.id === id);
+            if (updated) updated.status = 'completed';
+            renderView();
+          } catch (e) {
+            showToast('Failed to update: ' + (e as Error).message, 'error');
+          }
         });
       });
 
       container.querySelectorAll('.action-delete-btn').forEach(btn => {
         btn.addEventListener('click', async () => {
-          if (confirm('Delete this reservation?')) {
-            const id = Number((btn as HTMLElement).dataset.id);
-            await api.deleteBooking(id);
-            showToast('Booking deleted', 'success');
-            renderPropertyManager(container, showToast);
+          const id = Number((btn as HTMLElement).dataset.id);
+          if (confirm(`Cancel reservation #${id}?`)) {
+            try {
+              await api.deleteBooking(id);
+              showToast('Booking #' + id + ' removed.', 'success');
+              const idx = bookings.findIndex(b => b.id === id);
+              if (idx !== -1) bookings.splice(idx, 1);
+              renderView();
+            } catch (e) {
+              showToast('Failed to delete: ' + (e as Error).message, 'error');
+            }
           }
         });
       });
 
-      // Add Booking Modal
+      // Open Modals
       container.querySelector('#btn-add-booking-modal')?.addEventListener('click', () => {
         openAddBookingModal();
       });
 
-      // Add Property Modal
       container.querySelector('#btn-add-prop-modal')?.addEventListener('click', () => {
         openAddPropertyModal();
       });
@@ -223,8 +240,8 @@ export async function renderPropertyManager(container: HTMLElement, showToast: (
       modalHolder.innerHTML = `
         <div class="modal-overlay">
           <div class="modal-content">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
-              <h3 style="font-family: var(--font-heading); font-size: 1.25rem; font-weight: 700;">Add Direct Reservation</h3>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+              <h3 style="font-family: var(--font-heading); font-size: 1.3rem; font-weight: 800; color: var(--text-primary);">Add Direct Reservation</h3>
               <button id="btn-close-modal" class="btn btn-secondary btn-sm">✕</button>
             </div>
 
@@ -278,9 +295,9 @@ export async function renderPropertyManager(container: HTMLElement, showToast: (
                 <textarea id="modal-notes" class="form-textarea" placeholder="e.g. Early check-in, dietary preferences, airport pickup"></textarea>
               </div>
 
-              <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1rem;">
+              <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.5rem;">
                 <button type="button" id="btn-cancel-modal" class="btn btn-secondary">Cancel</button>
-                <button type="submit" class="btn btn-emerald">Save Reservation</button>
+                <button type="submit" class="btn btn-emerald">Create Reservation</button>
               </div>
             </form>
           </div>
@@ -310,12 +327,15 @@ export async function renderPropertyManager(container: HTMLElement, showToast: (
             check_out: checkOut,
             guests,
             source,
-            notes,
-            status: 'confirmed'
+            notes
           });
+
+          const updatedBookings = await api.getBookings();
+          bookings.length = 0;
+          bookings.push(...updatedBookings);
+          showToast('Direct reservation recorded successfully!', 'success');
           modalHolder.innerHTML = '';
-          showToast('Direct reservation added successfully!', 'success');
-          renderPropertyManager(container, showToast);
+          renderView();
         } catch (err) {
           showToast('Error creating booking: ' + (err as Error).message, 'error');
         }
@@ -327,8 +347,8 @@ export async function renderPropertyManager(container: HTMLElement, showToast: (
       modalHolder.innerHTML = `
         <div class="modal-overlay">
           <div class="modal-content">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
-              <h3 style="font-family: var(--font-heading); font-size: 1.25rem; font-weight: 700; color: #0f172a;">Add New Vacation Listing</h3>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+              <h3 style="font-family: var(--font-heading); font-size: 1.3rem; font-weight: 800; color: var(--text-primary);">Add New Vacation Listing</h3>
               <button id="btn-close-modal" class="btn btn-secondary btn-sm">✕</button>
             </div>
 
@@ -378,17 +398,17 @@ export async function renderPropertyManager(container: HTMLElement, showToast: (
 
               <div class="form-group">
                 <label class="form-label">Image URL</label>
-                <input type="text" id="prop-img" class="form-input" value="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80" />
+                <input type="text" id="prop-img" class="form-input" value="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=800&q=80" />
               </div>
 
               <div class="form-group">
-                <label class="form-label">Description</label>
-                <textarea id="prop-desc" class="form-textarea" placeholder="Brief summary of the listing..."></textarea>
+                <label class="form-label">Listing Description</label>
+                <textarea id="prop-desc" class="form-textarea" placeholder="Describe the ambiance, scenic views, and unique amenities..."></textarea>
               </div>
 
-              <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1rem;">
+              <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.5rem;">
                 <button type="button" id="btn-cancel-modal" class="btn btn-secondary">Cancel</button>
-                <button type="submit" class="btn btn-primary">Create Property</button>
+                <button type="submit" class="btn btn-primary">Publish Listing</button>
               </div>
             </form>
           </div>
@@ -415,30 +435,34 @@ export async function renderPropertyManager(container: HTMLElement, showToast: (
             name,
             property_type,
             location,
-            location_tier: 'premium',
             bedrooms,
             bathrooms,
             max_guests,
             base_rate,
-            amenities: ['wifi', 'ac', 'pool'],
-            description,
-            image_urls: [imgUrl]
+            amenities: ['wifi', 'ac'],
+            image_urls: [imgUrl],
+            description
           });
+
+          const updatedProps = await api.getProperties();
+          properties.length = 0;
+          properties.push(...updatedProps);
+          showToast('New property "' + name + '" published!', 'success');
           modalHolder.innerHTML = '';
-          showToast('New property listing created!', 'success');
-          renderPropertyManager(container, showToast);
+          renderView();
         } catch (err) {
-          showToast('Error creating property: ' + (err as Error).message, 'error');
+          showToast('Failed to add property: ' + (err as Error).message, 'error');
         }
       });
     }
 
+    // Initial render
     renderView();
 
   } catch (error) {
     container.innerHTML = `
       <div class="glass-card" style="text-align: center; padding: 3rem;">
-        <div style="color: #fb7185;">Could not load properties: ${(error as Error).message}</div>
+        <div style="color: var(--accent-rose); font-weight: 700;">Could not load properties: ${(error as Error).message}</div>
       </div>
     `;
   }
