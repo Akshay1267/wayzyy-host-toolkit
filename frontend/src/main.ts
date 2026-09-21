@@ -25,16 +25,13 @@ function initTheme() {
 function applyTheme(theme: string) {
   document.documentElement.setAttribute('data-theme', theme);
   const iconEl = document.getElementById('theme-icon-slot');
-  const labelEl = document.getElementById('theme-label-text');
+  const btn = document.getElementById('theme-toggle-btn');
   
-  if (iconEl && labelEl) {
-    if (theme === 'dark') {
-      iconEl.textContent = '🌙';
-      labelEl.textContent = 'Obsidian Dark';
-    } else {
-      iconEl.textContent = '☀️';
-      labelEl.textContent = 'Warm White';
-    }
+  if (iconEl) {
+    iconEl.textContent = theme === 'dark' ? '🌙' : '☀️';
+  }
+  if (btn) {
+    btn.setAttribute('title', theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode');
   }
 }
 
@@ -85,10 +82,9 @@ function initApp() {
       </div>
 
       <div class="header-right">
-        <!-- Theme Mode Toggle Button -->
-        <button id="theme-toggle-btn" class="theme-toggle-btn" title="Toggle Warm White / Obsidian Dark Theme" aria-label="Toggle Theme">
+        <!-- Theme Mode Toggle Button (Icon only) -->
+        <button id="theme-toggle-btn" class="theme-toggle-btn" title="Toggle Theme" aria-label="Toggle Theme">
           <span class="theme-icon-slot" id="theme-icon-slot">☀️</span>
-          <span id="theme-label-text">Warm White</span>
         </button>
 
         <!-- API Status Pill -->

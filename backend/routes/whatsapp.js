@@ -2,7 +2,8 @@
  * WhatsApp Cloud API Webhook Routes
  * 
  * GET  /api/whatsapp/webhook — Meta webhook verification (challenge-response)
- * POST /api/whatsapp/webhook — Incoming message handler
+ * POST /api/whatsapp/webhook — Incoming message handler with booking flow
+ * GET  /api/whatsapp/status  — WhatsApp integration status
  */
 
 const express = require('express');
@@ -35,7 +36,7 @@ router.get('/webhook', (req, res) => {
 /**
  * POST /api/whatsapp/webhook
  * Receives incoming messages from WhatsApp Cloud API.
- * Processes them through the AI concierge and sends replies.
+ * Processes them through the AI concierge, handles bookings, and sends replies.
  */
 router.post('/webhook', async (req, res) => {
   // Immediately acknowledge receipt — Meta expects 200 within 20s
@@ -43,9 +44,19 @@ router.post('/webhook', async (req, res) => {
 
   try {
     const body = req.body;
+    console.log('📩 WhatsApp Webhook POST received:', JSON.stringify(body, null, 2));
 
     // Validate this is a WhatsApp message notification
-    if (body?.object !== 'whatsapp_business_account') return;
+    if (body?.object !== 'whatsapp_business_account') {
+      console.log('ℹ️ Webhook ignored: body.object is', body?.object);
+      return;
+    }
+
+    // Check WhatsApp configuration
+    if (!isConfigured()) {
+      console.warn('⚠️ WhatsApp webhook received but WHATSAPP_ACCESS_TOKEN or WHATSAPP_PHONE_NUMBER_ID not configured in .env');
+      return;
+    }
 
     const entries = body.entry || [];
 
@@ -87,25 +98,69 @@ router.post('/webhook', async (req, res) => {
             // Process through AI concierge — use phone number as conversation ID
             const aiResponse = await processMessage(senderPhone, messageText.trim());
 
-            // Send AI reply text
-            await sendTextMessage(senderPhone, aiResponse.reply);
+            // ── Send booking confirmation receipt ──
+            if (aiResponse.bookingResult) {
+              const booking = aiResponse.bookingResult;
+              console.log(`🎉 WhatsApp booking created! #${booking.id} — ${booking.propertyName} for ${senderName} (${senderPhone})`);
 
-            // Send suggested actions as interactive buttons (max 3)
-            const actions = (aiResponse.suggestedActions || []).slice(0, 3);
-            if (actions.length > 0) {
-              const buttons = actions.map((action, i) => ({
-                id: `action_${i}_${Date.now()}`,
-                title: action
-              }));
+              // Send the confirmation message (already formatted by bot engine)
+              await sendTextMessage(senderPhone, aiResponse.reply);
 
-              // Small delay to ensure messages arrive in order
-              await new Promise(resolve => setTimeout(resolve, 500));
-              await sendInteractiveButtons(senderPhone, '💡 Quick actions:', buttons);
+              // Send post-booking action buttons
+              await new Promise(resolve => setTimeout(resolve, 800));
+              const postBookingButtons = [
+                { id: `details_${booking.id}`, title: '📋 Booking Details' },
+                { id: `contact_host_${booking.id}`, title: '📞 Contact Host' }
+              ];
+              await sendInteractiveButtons(
+                senderPhone,
+                `Your stay at ${booking.propertyName} is all set! Need anything else?`,
+                postBookingButtons
+              );
+
+            } else {
+              // ── Regular reply ──
+              await sendTextMessage(senderPhone, aiResponse.reply);
+
+              // Send suggested actions as interactive buttons (max 3)
+              const actions = (aiResponse.suggestedActions || []).slice(0, 3);
+              if (actions.length > 0) {
+                const buttons = actions.map((action, i) => ({
+                  id: `action_${i}_${Date.now()}`,
+                  title: action.substring(0, 20) // WhatsApp 20-char limit
+                }));
+
+                // Small delay to ensure messages arrive in order
+                await new Promise(resolve => setTimeout(resolve, 500));
+
+                try {
+                  await sendInteractiveButtons(senderPhone, '💡 Quick actions:', buttons);
+                } catch (btnErr) {
+                  // Interactive buttons can fail for various reasons; don't block the flow
+                  console.warn(`⚠️ Could not send interactive buttons to ${senderPhone}:`, btnErr.message);
+                }
+              }
             }
 
             console.log(`✅ Replied to ${senderName} (${senderPhone}) — Intent: ${aiResponse.intent}, Status: ${aiResponse.bookingStatus}`);
           } catch (msgErr) {
             console.error(`⚠️ Failed to process/reply to ${senderName} (${senderPhone}):`, msgErr.message);
+
+            // Detect token expiry and log clearly
+            if (msgErr.message && (msgErr.message.includes('expired') || msgErr.message.includes('OAuthException') || msgErr.message.includes('access token'))) {
+              console.error('🔑❌ WhatsApp Access Token has EXPIRED! Generate a new one from Meta Developer Dashboard → WhatsApp → API Setup');
+            }
+
+            // Try to send an error message to the guest
+            try {
+              await sendTextMessage(senderPhone, 'Sorry, I encountered a temporary issue. Please try again in a moment! 🙏');
+            } catch (retryErr) {
+              // If even this fails, the token is likely expired
+              if (retryErr.message && (retryErr.message.includes('expired') || retryErr.message.includes('OAuthException'))) {
+                console.error('🔑❌ WhatsApp Access Token has EXPIRED! Cannot send any messages. Refresh token in Meta Developer Dashboard.');
+              }
+              console.error('❌ Could not send error message to guest:', retryErr.message);
+            }
           }
         }
       }
@@ -118,11 +173,18 @@ router.post('/webhook', async (req, res) => {
 
 /**
  * GET /api/whatsapp/status
- * Returns the current WhatsApp integration status.
+ * Returns the current WhatsApp integration status with token health info.
  */
 router.get('/status', async (req, res) => {
   const { verifyToken } = require('../services/whatsappClient');
   const status = await verifyToken();
+
+  // Add helpful error context for common issues
+  if (status.error && status.error.includes('expired')) {
+    status.tokenExpired = true;
+    status.fix = 'Generate a new access token from Meta Developer Dashboard → Your App → WhatsApp → API Setup';
+  }
+
   res.json({ success: true, data: status });
 });
 

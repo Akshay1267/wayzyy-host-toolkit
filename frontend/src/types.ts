@@ -92,12 +92,30 @@ export interface BotContext {
   location?: string | null;
 }
 
+export interface BookingConfirmation {
+  id: number;
+  propertyId: number;
+  propertyName: string;
+  location: string;
+  checkIn: string;
+  checkOut: string;
+  nights: number;
+  guests: number;
+  nightlyRate: number;
+  totalAmount: number;
+  status: string;
+  source: string;
+  guestName: string;
+  guestPhone: string;
+}
+
 export interface BotResponse {
   reply: string;
   intent: string;
   extractedData: BotContext;
   suggestedActions: string[];
   bookingStatus: string;
+  bookingResult: BookingConfirmation | null;
   conversationId: string;
 }
 

@@ -265,11 +265,25 @@ export function renderBotSimulator(container: HTMLElement, showToast: (msg: stri
       // Remove typing placeholder
       messages.pop();
 
-      messages.push({
-        sender: 'bot',
-        text: response.reply,
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-      });
+      // Check if a booking was confirmed
+      if (response.bookingResult) {
+        const b = response.bookingResult;
+        const confirmationCard = `🎉 *BOOKING CONFIRMED!*\n\n━━━━━━━━━━━━━━━━━━━━\n📋 Booking #${b.id}\n━━━━━━━━━━━━━━━━━━━━\n\n🏡 ${b.propertyName}\n📍 ${b.location}\n\n📅 Check-in: ${b.checkIn}\n📅 Check-out: ${b.checkOut}\n🌙 ${b.nights} Night${b.nights > 1 ? 's' : ''}\n👥 ${b.guests} Guest${b.guests > 1 ? 's' : ''}\n\n💰 ₹${b.nightlyRate.toLocaleString('en-IN')}/night\n💵 Total: ₹${b.totalAmount.toLocaleString('en-IN')}\n\n✅ Status: Confirmed\n📱 Booked via: WhatsApp Direct`;
+
+        messages.push({
+          sender: 'bot',
+          text: confirmationCard,
+          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        });
+
+        showToast(`Booking #${b.id} confirmed — ${b.propertyName} (₹${b.totalAmount.toLocaleString('en-IN')})`, 'success');
+      } else {
+        messages.push({
+          sender: 'bot',
+          text: response.reply,
+          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        });
+      }
 
       currentIntent = response.intent;
       currentContext = { ...currentContext, ...response.extractedData };
