@@ -10,6 +10,7 @@ const express = require('express');
 const router = express.Router();
 const { processMessage } = require('../services/botEngine');
 const { sendTextMessage, sendInteractiveButtons, markAsRead, isConfigured } = require('../services/whatsappClient');
+const { getPublicUrl } = require('../services/paymentService');
 
 // Default verify token — override via WHATSAPP_VERIFY_TOKEN in .env
 const VERIFY_TOKEN = process.env.WHATSAPP_VERIFY_TOKEN || 'wayzyy_webhook_verify_2026';
@@ -78,21 +79,33 @@ router.post('/webhook', async (req, res) => {
           const messageId = message.id;
           const senderName = contacts.find(c => c.wa_id === senderPhone)?.profile?.name || 'Guest';
 
-          // Extract message text
+          // Extract message text and button ID
           let messageText = '';
+          let buttonId = '';
           if (message.type === 'text') {
             messageText = message.text?.body || '';
           } else if (message.type === 'interactive') {
-            // Handle button reply clicks
+            buttonId = message.interactive?.button_reply?.id || '';
             messageText = message.interactive?.button_reply?.title || message.interactive?.list_reply?.title || '';
           }
 
-          if (!messageText.trim()) continue;
+          if (!messageText.trim() && !buttonId) continue;
 
-          console.log(`📩 WhatsApp message from ${senderName} (${senderPhone}): "${messageText}"`);
+          console.log(`📩 WhatsApp message from ${senderName} (${senderPhone}): "${messageText}" (buttonId: ${buttonId || 'none'})`);
 
           // Mark message as read (blue ticks)
           markAsRead(messageId);
+
+          // Handle direct payment button click
+          if (buttonId.startsWith('pay_') || messageText.includes('Pay Online')) {
+            const bId = buttonId.replace('pay_', '').trim();
+            const payUrl = `${getPublicUrl()}/pay/${bId}`;
+            await sendTextMessage(
+              senderPhone,
+              `💳 *SECURE PAYMENT LINK*\n\nTo complete your reservation, tap the link below to pay via *Google Pay, PhonePe, Paytm, UPI QR, or Card*:\n\n👉 ${payUrl}\n\nYour check-in voucher will be issued immediately upon payment confirmation! 🙏`
+            );
+            continue;
+          }
 
           try {
             // Process through AI concierge — use phone number as conversation ID
@@ -106,15 +119,16 @@ router.post('/webhook', async (req, res) => {
               // Send the confirmation message (already formatted by bot engine)
               await sendTextMessage(senderPhone, aiResponse.reply);
 
-              // Send post-booking action buttons
+              // Send post-booking action buttons (including Pay Online!)
               await new Promise(resolve => setTimeout(resolve, 800));
               const postBookingButtons = [
+                { id: `pay_${booking.id}`, title: '💳 Pay Online' },
                 { id: `details_${booking.id}`, title: '📋 Booking Details' },
                 { id: `contact_host_${booking.id}`, title: '📞 Contact Host' }
               ];
               await sendInteractiveButtons(
                 senderPhone,
-                `Your stay at ${booking.propertyName} is all set! Need anything else?`,
+                `Your stay at ${booking.propertyName} is reserved! Tap below to view your voucher & pay online:`,
                 postBookingButtons
               );
 

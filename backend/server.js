@@ -4,12 +4,14 @@ require('dotenv').config();
 
 const { getDb } = require('./db/db');
 const { testConnection } = require('./services/anthropicClient');
+const path = require('path');
 const propertiesRouter = require('./routes/properties');
 const bookingsRouter = require('./routes/bookings');
 const pricingRouter = require('./routes/pricing');
 const listingRouter = require('./routes/listing');
 const botRouter = require('./routes/bot');
 const whatsappRouter = require('./routes/whatsapp');
+const paymentsRouter = require('./routes/payments');
 const { isConfigured: isWhatsAppConfigured, verifyToken: verifyWhatsApp } = require('./services/whatsappClient');
 
 const app = express();
@@ -62,6 +64,8 @@ app.use('/api/pricing', pricingRouter);
 app.use('/api/listing', listingRouter);
 app.use('/api/bot', botRouter);
 app.use('/api/whatsapp', whatsappRouter);
+app.use(express.static(path.join(__dirname, 'public')));
+app.use('/', paymentsRouter);
 
 // Global Error Handler
 app.use((err, req, res, next) => {

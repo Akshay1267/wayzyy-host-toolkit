@@ -32,6 +32,10 @@ export interface Booking {
   total_amount: number;
   nightly_rate: number;
   status: 'confirmed' | 'pending' | 'completed' | 'cancelled';
+  payment_status?: 'paid' | 'unpaid';
+  payment_id?: string;
+  paid_at?: string;
+  payment_url?: string;
   source: 'whatsapp' | 'direct' | 'platform';
   notes?: string;
   created_at: string;
@@ -104,6 +108,7 @@ export interface BookingConfirmation {
   nightlyRate: number;
   totalAmount: number;
   status: string;
+  paymentUrl?: string;
   source: string;
   guestName: string;
   guestPhone: string;

@@ -145,7 +145,14 @@ export async function renderPropertyManager(container: HTMLElement, showToast: (
                       </span>
                     </td>
                     <td>
-                      <span class="badge-status badge-${b.status}">${b.status}</span>
+                      <div style="display: flex; align-items: center; gap: 4px; flex-wrap: wrap;">
+                        <span class="badge-status badge-${b.status}">${b.status}</span>
+                        ${b.payment_status === 'paid' ? `
+                          <span class="badge-status" style="background: rgba(46, 125, 50, 0.12); color: #2e7d32; border: 1px solid rgba(46, 125, 50, 0.3); font-size: 0.72rem;">✓ Paid</span>
+                        ` : `
+                          <a href="/pay/${b.id}" target="_blank" class="badge-status" style="background: rgba(197, 155, 39, 0.12); color: #c59b27; border: 1px solid rgba(197, 155, 39, 0.3); font-size: 0.7rem; text-decoration: none;" title="Open Checkout Page">💳 Pay Link</a>
+                        `}
+                      </div>
                     </td>
                     <td>
                       <div style="display: flex; gap: 0.35rem;">

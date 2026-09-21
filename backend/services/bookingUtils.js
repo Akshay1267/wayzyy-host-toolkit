@@ -7,6 +7,7 @@
 
 const { getDb } = require('../db/db');
 const { suggestPrice } = require('./pricingEngine');
+const { getPublicUrl } = require('./paymentService');
 
 // ─── Property Resolution ───────────────────────────────────────────
 
@@ -329,6 +330,9 @@ function createBookingFromWhatsApp({ propertyId, guestName, guestPhone, checkIn,
   );
 
   const bookingId = result.lastInsertRowid;
+  const publicUrl = getPublicUrl();
+  const paymentUrl = `${publicUrl}/pay/${bookingId}`;
+  const upiLink = `upi://pay?pa=wayzyy.stays@upi&pn=Wayzyy+Luxury+Stays&am=${totalAmount}&cu=INR&tn=Booking-${bookingId}`;
 
   return {
     success: true,
@@ -344,6 +348,9 @@ function createBookingFromWhatsApp({ propertyId, guestName, guestPhone, checkIn,
       nightlyRate,
       totalAmount,
       status: 'confirmed',
+      paymentStatus: 'unpaid',
+      paymentUrl,
+      upiLink,
       source: 'whatsapp',
       guestName: guestName || 'WhatsApp Guest',
       guestPhone: guestPhone || ''
@@ -367,7 +374,9 @@ function formatBookingConfirmation(booking) {
     return d.toLocaleDateString('en-IN', options);
   };
 
-  return `🎉 *BOOKING CONFIRMED!*
+  const payUrl = booking.paymentUrl || `${getPublicUrl()}/pay/${booking.id}`;
+
+  return `🎉 *BOOKING RESERVED!*
 
 ━━━━━━━━━━━━━━━━━━━━
 📋 *Booking #${booking.id}*
@@ -378,18 +387,19 @@ function formatBookingConfirmation(booking) {
 
 📅 Check-in:  ${formatDisplayDate(checkInDate)}
 📅 Check-out: ${formatDisplayDate(checkOutDate)}
-🌙 ${booking.nights} Night${booking.nights > 1 ? 's' : ''}
-👥 ${booking.guests} Guest${booking.guests > 1 ? 's' : ''}
+🌙 ${booking.nights} Night${booking.nights > 1 ? 's' : ''} • 👥 ${booking.guests} Guest${booking.guests > 1 ? 's' : ''}
 
 💰 *₹${booking.nightlyRate.toLocaleString('en-IN')}/night*
 💵 *Total: ₹${booking.totalAmount.toLocaleString('en-IN')}*
+✨ Direct booking saves 15-20% on OTA fees!
 
 ━━━━━━━━━━━━━━━━━━━━
-✅ Status: *Confirmed*
-📱 Booked via: WhatsApp Direct
-💳 Save 15-20% on OTA fees!
+💳 *SECURE PAYMENT & UPI LINK:*
+👉 ${payUrl}
 
-Thank you for booking directly with us! Your host will reach out shortly with check-in instructions. 🙏`;
+Tap the link above to view your booking voucher and complete payment via *Google Pay, PhonePe, Paytm, or UPI QR Code*.
+
+Door access code and property manager contact details will be automatically issued once payment is confirmed! 🙏`;
 }
 
 /**

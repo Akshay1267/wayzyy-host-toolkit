@@ -17,6 +17,10 @@ function handleOutput(data) {
   const match = text.match(/https:\/\/[a-z0-9-]+\.trycloudflare\.com/);
   if (match) {
     const url = match[0];
+    try {
+      const path = require('path');
+      fs.writeFileSync(path.join(__dirname, '.tunnel_url'), url.trim(), 'utf8');
+    } catch (_) {}
     console.log('\n============================================================');
     console.log('🎉 CLOUDFLARE TUNNEL IS LIVE & READY FOR META DEVELOPERS:');
     console.log(`🔗 Callback URL : ${url}/api/whatsapp/webhook`);

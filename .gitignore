@@ -17,6 +17,7 @@ backend/db/*.db-wal
 backend/db/*.db-shm
 *.sqlite
 *.sqlite3
+backend/.tunnel_url
 
 # Build outputs
 dist/

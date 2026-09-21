@@ -198,7 +198,14 @@ export async function renderDashboard(container: HTMLElement, onNavigate: (tab: 
                   <td style="font-weight: 600; color: var(--text-secondary);">${b.guests} guests</td>
                   <td style="font-family: var(--font-mono); font-weight: 800; color: var(--accent-emerald); font-size: 0.98rem;">₹${b.total_amount.toLocaleString('en-IN')}</td>
                   <td>
-                    <span class="badge-status badge-${b.status}">${b.status}</span>
+                    <div style="display: flex; align-items: center; gap: 4px; flex-wrap: wrap;">
+                      <span class="badge-status badge-${b.status}">${b.status}</span>
+                      ${b.payment_status === 'paid' ? `
+                        <span class="badge-status" style="background: rgba(46, 125, 50, 0.12); color: #2e7d32; border: 1px solid rgba(46, 125, 50, 0.3); font-size: 0.72rem;">✓ Paid</span>
+                      ` : `
+                        <a href="/pay/${b.id}" target="_blank" class="badge-status" style="background: rgba(197, 155, 39, 0.12); color: #c59b27; border: 1px solid rgba(197, 155, 39, 0.3); font-size: 0.7rem; text-decoration: none;" title="Open Checkout Page">💳 Pay Link</a>
+                      `}
+                    </div>
                   </td>
                   <td>
                     <span style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-secondary); font-weight: 700;">

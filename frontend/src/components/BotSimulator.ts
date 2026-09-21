@@ -268,7 +268,8 @@ export function renderBotSimulator(container: HTMLElement, showToast: (msg: stri
       // Check if a booking was confirmed
       if (response.bookingResult) {
         const b = response.bookingResult;
-        const confirmationCard = `🎉 *BOOKING CONFIRMED!*\n\n━━━━━━━━━━━━━━━━━━━━\n📋 Booking #${b.id}\n━━━━━━━━━━━━━━━━━━━━\n\n🏡 ${b.propertyName}\n📍 ${b.location}\n\n📅 Check-in: ${b.checkIn}\n📅 Check-out: ${b.checkOut}\n🌙 ${b.nights} Night${b.nights > 1 ? 's' : ''}\n👥 ${b.guests} Guest${b.guests > 1 ? 's' : ''}\n\n💰 ₹${b.nightlyRate.toLocaleString('en-IN')}/night\n💵 Total: ₹${b.totalAmount.toLocaleString('en-IN')}\n\n✅ Status: Confirmed\n📱 Booked via: WhatsApp Direct`;
+        const payUrl = b.paymentUrl || `/pay/${b.id}`;
+        const confirmationCard = `🎉 *BOOKING RESERVED!*\n\n━━━━━━━━━━━━━━━━━━━━\n📋 Booking #${b.id}\n━━━━━━━━━━━━━━━━━━━━\n\n🏡 ${b.propertyName}\n📍 ${b.location}\n\n📅 Check-in: ${b.checkIn}\n📅 Check-out: ${b.checkOut}\n🌙 ${b.nights} Night${b.nights > 1 ? 's' : ''}\n👥 ${b.guests} Guest${b.guests > 1 ? 's' : ''}\n\n💰 ₹${b.nightlyRate.toLocaleString('en-IN')}/night\n💵 Total: ₹${b.totalAmount.toLocaleString('en-IN')}\n\n💳 *Instant Payment & UPI Checkout:*\n👉 <a href="${payUrl}" target="_blank" style="color: #c59b27; text-decoration: underline; font-weight: bold;">Open Payment Page</a>\n\n✅ Status: Reserved (Unpaid)\n📱 Booked via: WhatsApp Direct`;
 
         messages.push({
           sender: 'bot',
@@ -276,7 +277,7 @@ export function renderBotSimulator(container: HTMLElement, showToast: (msg: stri
           time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
         });
 
-        showToast(`Booking #${b.id} confirmed — ${b.propertyName} (₹${b.totalAmount.toLocaleString('en-IN')})`, 'success');
+        showToast(`Booking #${b.id} reserved — ${b.propertyName} (₹${b.totalAmount.toLocaleString('en-IN')})`, 'success');
       } else {
         messages.push({
           sender: 'bot',

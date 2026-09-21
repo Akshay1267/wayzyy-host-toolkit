@@ -20,9 +20,12 @@ function getDb() {
       db.exec(schema);
     }
 
-    // Auto-populate seed data if empty
+    // Auto-populate seed data ONLY if properties table is empty
     try {
-      populateSeedData(db);
+      const propCount = db.prepare('SELECT count(*) as c FROM properties').get();
+      if (!propCount || propCount.c === 0) {
+        populateSeedData(db);
+      }
     } catch (e) {
       console.warn('Auto-seed check notice:', e.message);
     }
