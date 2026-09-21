@@ -1,15 +1,29 @@
 /**
  * Payment Service for Wayzyy Bookings
  * 
- * Handles UPI link generation, QR code generation, payment checkout details,
- * payment confirmation, and automated WhatsApp receipt notifications.
+ * Handles UPI link generation, dynamic QR code generation, Razorpay Orders & verification,
+ * payment checkout details, payment confirmation, and automated WhatsApp receipt notifications.
  */
 
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
 const QRCode = require('qrcode');
+const Razorpay = require('razorpay');
 const { getDb } = require('../db/db');
 const { sendTextMessage, sendInteractiveButtons } = require('./whatsappClient');
+
+let razorpayInstance = null;
+
+function getRazorpay() {
+  if (!razorpayInstance && process.env.RAZORPAY_KEY_ID && process.env.RAZORPAY_KEY_SECRET) {
+    razorpayInstance = new Razorpay({
+      key_id: process.env.RAZORPAY_KEY_ID,
+      key_secret: process.env.RAZORPAY_KEY_SECRET
+    });
+  }
+  return razorpayInstance;
+}
 
 /**
  * Get current public URL for checkout links.
@@ -66,7 +80,9 @@ async function generatePaymentDetails(booking) {
     upiLink,
     qrCodeDataUrl,
     amount,
-    currency: 'INR'
+    currency: 'INR',
+    razorpayKeyId: process.env.RAZORPAY_KEY_ID || null,
+    hasRazorpay: Boolean(process.env.RAZORPAY_KEY_ID && process.env.RAZORPAY_KEY_SECRET)
   };
 }
 
@@ -104,6 +120,69 @@ function getBookingForCheckout(bookingId) {
 }
 
 /**
+ * Create a Razorpay Order for a specific booking.
+ */
+async function createRazorpayOrder(bookingId) {
+  const rzp = getRazorpay();
+  if (!rzp) {
+    throw new Error('Razorpay keys not configured in .env');
+  }
+
+  const booking = getBookingForCheckout(bookingId);
+  if (!booking) {
+    throw new Error('Booking not found');
+  }
+
+  const amountInPaise = Math.round(Number(booking.total_amount) * 100);
+
+  const options = {
+    amount: amountInPaise,
+    currency: 'INR',
+    receipt: `rcpt_${booking.id}_${Date.now()}`,
+    notes: {
+      bookingId: String(booking.id),
+      propertyName: booking.property_name,
+      guestName: booking.guest_name
+    }
+  };
+
+  const order = await rzp.orders.create(options);
+
+  return {
+    orderId: order.id,
+    amount: order.amount,
+    currency: order.currency,
+    keyId: process.env.RAZORPAY_KEY_ID,
+    booking
+  };
+}
+
+/**
+ * Verify Razorpay payment signature and settle booking.
+ */
+async function verifyRazorpayPayment({ orderId, paymentId, signature, bookingId }) {
+  const secret = process.env.RAZORPAY_KEY_SECRET;
+  if (!secret) {
+    throw new Error('Razorpay secret not configured in .env');
+  }
+
+  const body = `${orderId}|${paymentId}`;
+  const expectedSignature = crypto
+    .createHmac('sha256', secret)
+    .update(body.toString())
+    .digest('hex');
+
+  if (expectedSignature !== signature) {
+    throw new Error('Invalid Razorpay signature. Payment verification failed.');
+  }
+
+  return await confirmBookingPayment(bookingId, {
+    method: 'Razorpay (Verified UPI/Card)',
+    transactionId: paymentId
+  });
+}
+
+/**
  * Confirm payment, update database record, and send WhatsApp confirmation receipt.
  */
 async function confirmBookingPayment(bookingId, paymentData = {}) {
@@ -115,7 +194,7 @@ async function confirmBookingPayment(bookingId, paymentData = {}) {
   }
 
   const transactionId = paymentData.transactionId || `TXN_${Date.now()}_${Math.floor(Math.random() * 1000)}`;
-  const method = paymentData.method || 'UPI (Instant)';
+  const method = paymentData.method || 'Razorpay UPI';
   const now = new Date().toISOString();
 
   // Update DB
@@ -204,6 +283,8 @@ module.exports = {
   getPublicUrl,
   generatePaymentDetails,
   getBookingForCheckout,
+  createRazorpayOrder,
+  verifyRazorpayPayment,
   confirmBookingPayment,
   formatPaymentReceiptMessage
 };

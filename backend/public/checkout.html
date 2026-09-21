@@ -7,6 +7,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+  <!-- Razorpay Official Checkout SDK -->
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <style>
     :root {
       --bg-base: #f8f6f0;
@@ -261,6 +263,39 @@
       transform: translateY(-2px);
     }
 
+    .btn-razorpay {
+      background: linear-gradient(135deg, #0c2340 0%, #173d6d 100%);
+      border: 1px solid #295f98;
+      box-shadow: 0 8px 20px rgba(12, 35, 64, 0.25);
+    }
+
+    .btn-razorpay:hover {
+      background: linear-gradient(135deg, #08172b 0%, #102e52 100%);
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary-pay {
+      width: 100%;
+      background: #faf8f5;
+      color: var(--text-muted);
+      border: 1px dashed var(--border-color);
+      padding: 10px;
+      border-radius: var(--radius-md);
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-secondary-pay:hover {
+      background: #f1ede6;
+      color: var(--text-main);
+    }
+
     .btn-upi-intent {
       width: 100%;
       background: #f5f3ef;
@@ -437,10 +472,15 @@
           <span>Open in UPI App (Mobile)</span>
         </a>
 
-        <!-- Instant Simulated Pay Button -->
-        <button id="btn-simulate-pay" class="btn-pay" style="margin-top: 12px;" onclick="handlePayment()">
+        <!-- Razorpay Official Checkout Button -->
+        <button id="btn-razorpay" class="btn-pay btn-razorpay" style="margin-top: 14px;" onclick="handleRazorpayPayment()">
           <span>💳</span>
-          <span id="btn-pay-text">Confirm Payment of ₹...</span>
+          <span id="btn-rzp-text">Pay with Razorpay (UPI / Cards / NetBanking)</span>
+        </button>
+
+        <!-- Fast Test Settlement Button (For zero-friction Hackathon testing) -->
+        <button id="btn-simulate-pay" class="btn-secondary-pay" style="margin-top: 10px;" onclick="handlePayment()">
+          <span>⚡ Instant 1-Click Test Settlement (Demo)</span>
         </button>
       </div>
     </div>
@@ -508,7 +548,7 @@
         const amtFormatted = Number(currentBooking.total_amount).toLocaleString('en-IN');
         document.getElementById('price-base').textContent = `₹${amtFormatted}`;
         document.getElementById('price-total').textContent = `₹${amtFormatted}`;
-        document.getElementById('btn-pay-text').textContent = `Confirm Payment of ₹${amtFormatted}`;
+        document.getElementById('btn-rzp-text').textContent = `Pay ₹${amtFormatted} with Razorpay`;
 
         // QR and UPI App Link
         if (details.qrCodeDataUrl) {
@@ -528,6 +568,100 @@
         }
       } catch (err) {
         console.error('Error fetching booking:', err);
+      }
+    }
+
+    async function handleRazorpayPayment() {
+      const btn = document.getElementById('btn-razorpay');
+      const text = document.getElementById('btn-rzp-text');
+      
+      if (!currentBooking) {
+        alert('Booking details still loading, please wait a moment.');
+        return;
+      }
+
+      btn.disabled = true;
+      const originalText = text.innerHTML;
+      text.innerHTML = '<span class="loading-spinner"></span> Initializing Razorpay...';
+
+      try {
+        const orderRes = await fetch('/api/payments/razorpay/create-order', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ bookingId: currentBooking.id })
+        });
+        const orderData = await orderRes.json();
+
+        if (!orderData.success) {
+          throw new Error(orderData.error || 'Failed to initialize payment order');
+        }
+
+        const options = {
+          key: orderData.keyId,
+          amount: orderData.amount,
+          currency: orderData.currency || 'INR',
+          name: 'Wayzyy Luxury Stays',
+          description: `Stay Reservation #${currentBooking.id} • ${currentBooking.property_name}`,
+          image: 'https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f3e1.png',
+          order_id: orderData.orderId,
+          handler: async function (response) {
+            text.innerHTML = '<span class="loading-spinner"></span> Verifying with Bank...';
+            try {
+              const verifyRes = await fetch('/api/payments/razorpay/verify', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  bookingId: currentBooking.id,
+                  orderId: response.razorpay_order_id,
+                  paymentId: response.razorpay_payment_id,
+                  signature: response.razorpay_signature
+                })
+              });
+              const verifyData = await verifyRes.json();
+              if (verifyData.success) {
+                showSuccess(verifyData);
+              } else {
+                alert('Verification error: ' + (verifyData.error || 'Could not verify payment signature.'));
+                btn.disabled = false;
+                text.innerHTML = originalText;
+              }
+            } catch (vErr) {
+              alert('Verification network error: ' + vErr.message);
+              btn.disabled = false;
+              text.innerHTML = originalText;
+            }
+          },
+          prefill: {
+            name: currentBooking.guest_name || 'Guest',
+            contact: currentBooking.guest_phone || ''
+          },
+          notes: {
+            booking_id: currentBooking.id,
+            property: currentBooking.property_name
+          },
+          theme: {
+            color: '#0c2340'
+          },
+          modal: {
+            ondismiss: function() {
+              btn.disabled = false;
+              text.innerHTML = originalText;
+            }
+          }
+        };
+
+        const rzp = new Razorpay(options);
+        rzp.on('payment.failed', function (resp) {
+          alert('Payment failed: ' + (resp.error.description || resp.error.reason));
+          btn.disabled = false;
+          text.innerHTML = originalText;
+        });
+        rzp.open();
+      } catch (err) {
+        console.error('Razorpay flow error:', err);
+        alert('Could not start Razorpay: ' + err.message);
+        btn.disabled = false;
+        text.innerHTML = originalText;
       }
     }
 
